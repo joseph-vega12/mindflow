@@ -1,0 +1,1 @@
+export { TextsTable } from './TextsTables';

@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "mindflow-1e15b",
+    "development": "mindflow-staging",
+    "production": "mindflow-1e15b"
+  },
+  "targets": {},
+  "etags": {}
+}

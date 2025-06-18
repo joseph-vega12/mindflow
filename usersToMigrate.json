@@ -1,0 +1,1151 @@
+[
+  {
+    "user": {
+      "picture": "https://firebasestorage.googleapis.com/v0/b/mindflow-1e15b.appspot.com/o/pictures%2F8JNvavdNONOLHiM0STymKlRPu0v2?alt=media&token=3229c3c1-5153-4cc6-8167-5f5c2de3684f",
+      "difficultLevel": "college",
+      "license": {
+        "purchaseDate": 1640610012252,
+        "activationDate": 1640610012252,
+        "type": null,
+        "id": "MPCYT90yUltnm41GqYkl",
+        "expirationDate": 1656162012252,
+        "status": "ACTIVE",
+        "orderId": "beta_testing"
+      },
+      "email": "gabrieldeoliveira.gdo23@gmail.com",
+      "examDate": "2027-08-23",
+      "schoolName": "Católica de Santa Catarina - Centro Universitário",
+      "phone": "+5547991707535",
+      "level": 1,
+      "activity": {
+        "counters": {
+          "practices": 0,
+          "brainEyeCoordination": 0,
+          "videos": 0,
+          "speedRead": 2,
+          "diagnostics": 2
+        },
+        "tutorial": {
+          "welcomeVideo": true,
+          "speedReadingTest": true,
+          "tutorialVideo": true,
+          "diagnosticTest": true
+        },
+        "stats": {
+          "wordSpeed": {
+            "bestWordSpeed": 999,
+            "averageWordSpeed": 816.5,
+            "firstWordSpeed": 634,
+            "totalWordSpeedReports": 2,
+            "lastWordSpeed": 999
+          },
+          "comprehension": {
+            "lastComprehension": 33,
+            "averageComprehension": 16.5,
+            "totalComprehensionReports": 2
+          },
+          "videos": {},
+          "testResults": [
+            {
+              "resultId": "Hw3YG2uTddyxyOp2pi8X",
+              "wordSpeed": 634,
+              "comprehension": 0,
+              "essayId": "-Map7KnHze20E2Z3zYYD",
+              "category": "college",
+              "timestamp": 1636339522740,
+              "type": "speed-read"
+            },
+            {
+              "essayId": "-M29wg-ZPfqDzjIG998f",
+              "comprehension": 33,
+              "type": "speed-read",
+              "wordSpeed": 999,
+              "resultId": "vFCNb8gOlvU3XF63yaBS",
+              "timestamp": 1636514748990,
+              "category": "college"
+            }
+          ],
+          "diagnostics": {
+            "gmat": [
+              {
+                "totalTime": 0,
+                "totalOfQuestions": 6,
+                "totalScore": 0,
+                "scorePercentage": 0,
+                "diagnosticResultId": "cDC3ZPmYlfoghxEy8iBr",
+                "diagnosticId": "-M-xX_Wkk_07H8fleSwa",
+                "order": 0,
+                "name": "GMAT Pre Test"
+              },
+              {
+                "scorePercentage": 0,
+                "order": 0,
+                "totalScore": 0,
+                "name": "GMAT Pre Test",
+                "totalOfQuestions": 6,
+                "diagnosticResultId": "q0Db9ffrEE9noR5wIdYj",
+                "totalTime": 0,
+                "diagnosticId": "-M-xX_Wkk_07H8fleSwa"
+              }
+            ]
+          }
+        }
+      },
+      "lastName": "de Oliveira",
+      "testType": "lsat",
+      "firstName": "Gabriel",
+      "id": "8JNvavdNONOLHiM0STymKlRPu0v2"
+    },
+    "license": {
+      "id": "MPCYT90yUltnm41GqYkl",
+      "timestamp": 1640610012252,
+      "durationDays": 90,
+      "expirationDate": 1656162012252,
+      "orderId": "beta_testing",
+      "user": {
+        "difficultLevel": "college",
+        "testType": "lsat",
+        "email": "gabrieldeoliveira.gdo23@gmail.com",
+        "picture": "https://firebasestorage.googleapis.com/v0/b/mindflow-1e15b.appspot.com/o/pictures%2F8JNvavdNONOLHiM0STymKlRPu0v2?alt=media&token=3229c3c1-5153-4cc6-8167-5f5c2de3684f",
+        "lastSeen": null,
+        "firstName": "Gabriel",
+        "id": "8JNvavdNONOLHiM0STymKlRPu0v2",
+        "lastName": "de Oliveira"
+      },
+      "status": "ACTIVE",
+      "purchaseDate": 1640610012252,
+      "userId": "8JNvavdNONOLHiM0STymKlRPu0v2",
+      "activationDate": 1640610012252
+    }
+  },
+  {
+    "user": {
+      "testType": "gmat",
+      "licenseId": "o1PVGYQR3Y1kxHRUA16J",
+      "email": "aligpichette@gmail.com",
+      "lastName": "Pichette",
+      "firstName": "Alicia",
+      "level": 1,
+      "difficultLevel": "college",
+      "license": {
+        "id": "o1PVGYQR3Y1kxHRUA16J",
+        "status": "ACTIVE",
+        "purchaseDate": 1637003814745,
+        "type": null,
+        "activationDate": 1637003814745,
+        "orderId": "beta_testing",
+        "expirationDate": 1652555814745
+      },
+      "activity": {
+        "counters": {
+          "speedRead": 0,
+          "diagnostics": 0,
+          "brainEyeCoordination": 0,
+          "videos": 0,
+          "practices": 0
+        },
+        "tutorial": {
+          "tutorialVideo": true,
+          "welcomeVideo": true,
+          "diagnosticTest": false,
+          "speedReadingTest": false
+        },
+        "stats": {
+          "wordSpeed": {
+            "totalWordSpeedReports": 0,
+            "bestWordSpeed": 0,
+            "firstWordSpeed": 0,
+            "lastWordSpeed": 0,
+            "averageWordSpeed": 0
+          },
+          "diagnostics": {},
+          "comprehension": {
+            "totalComprehensionReports": 0,
+            "averageComprehension": 0,
+            "lastComprehension": 0
+          },
+          "videos": {}
+        }
+      },
+      "id": "B9p3Qok45cMki4zHiYLcsFwCJ0r2"
+    },
+    "license": {
+      "id": "o1PVGYQR3Y1kxHRUA16J",
+      "status": "ACTIVE",
+      "expirationDate": 1652555814745,
+      "user": {
+        "email": "aligpichette@gmail.com",
+        "testType": "gmat",
+        "lastSeen": null,
+        "difficultLevel": "college",
+        "id": "B9p3Qok45cMki4zHiYLcsFwCJ0r2",
+        "lastName": "Pichette",
+        "firstName": "Alicia",
+        "picture": null
+      },
+      "durationDays": 90,
+      "timestamp": 1637003814745,
+      "orderId": "beta_testing",
+      "userId": "B9p3Qok45cMki4zHiYLcsFwCJ0r2",
+      "purchaseDate": 1637003814745,
+      "activationDate": 1637003814745
+    }
+  },
+  {
+    "user": {
+      "schoolName": "NA",
+      "licenseId": "2mE385wK5T4A5gjUojyn",
+      "level": 1,
+      "phone": "+8596523228___",
+      "license": {
+        "status": "ACTIVE",
+        "orderId": "beta_testing",
+        "activationDate": 1640023461696,
+        "expirationDate": 1655575461696,
+        "purchaseDate": 1640023461696,
+        "id": "2mE385wK5T4A5gjUojyn",
+        "type": null
+      },
+      "firstName": "Rhett",
+      "lastName": "Barbour",
+      "testType": "gmat",
+      "difficultLevel": "college",
+      "email": "rhett@torchprep.com",
+      "activity": {
+        "counters": {
+          "diagnostics": 0,
+          "practices": 0,
+          "videos": 7,
+          "brainEyeCoordination": 1,
+          "speedRead": 1
+        },
+        "stats": {
+          "comprehension": {
+            "totalComprehensionReports": 2,
+            "averageComprehension": 49.5,
+            "lastComprehension": 66
+          },
+          "testResults": [
+            {
+              "essayId": "-Map7KnHze20E2Z3zYYD",
+              "wordSpeed": 337,
+              "resultId": "vO3W7eBn1WaAxPbjWOgb",
+              "type": "speed-read",
+              "timestamp": 1640024169948,
+              "category": "college",
+              "comprehension": 33
+            },
+            {
+              "comprehension": 66,
+              "resultId": "MCvSoU6PvgxIB1fGKvYo",
+              "timestamp": 1640026494086,
+              "essayId": "-M29wg-ZPfqDzjIG998f",
+              "type": "brain-eye-coordination",
+              "category": "college",
+              "wordSpeed": 500
+            }
+          ],
+          "wordSpeed": {
+            "totalWordSpeedReports": 1,
+            "firstWordSpeed": 337,
+            "bestWordSpeed": 337,
+            "lastWordSpeed": 337,
+            "averageWordSpeed": 337
+          },
+          "diagnostics": {},
+          "videos": {
+            "G2QB6Bd4": true,
+            "Y4c1RdRw": true,
+            "19AltKcI": true,
+            "NECzcY5C": true,
+            "rCZxy6YG": true,
+            "hZqmGxNb": true
+          }
+        },
+        "tutorial": {
+          "tutorialVideo": true,
+          "diagnosticTest": false,
+          "welcomeVideo": true,
+          "speedReadingTest": true
+        }
+      },
+      "examDate": "2022-03-15",
+      "id": "Bp278GkZCHf0nCP30s8FLwZeXvH2"
+    },
+    "license": {
+      "id": "2mE385wK5T4A5gjUojyn",
+      "status": "ACTIVE",
+      "purchaseDate": 1640023461696,
+      "expirationDate": 1655575461696,
+      "orderId": "beta_testing",
+      "durationDays": 90,
+      "userId": "Bp278GkZCHf0nCP30s8FLwZeXvH2",
+      "activationDate": 1640023461696,
+      "user": {
+        "testType": "gmat",
+        "email": "rhett@torchprep.com",
+        "picture": null,
+        "firstName": "Rhett",
+        "id": "Bp278GkZCHf0nCP30s8FLwZeXvH2",
+        "lastSeen": null,
+        "lastName": "Barbour",
+        "difficultLevel": "college"
+      },
+      "timestamp": 1640023461696
+    }
+  },
+  {
+    "user": {
+      "activity": {
+        "tutorial": {
+          "tutorialVideo": true,
+          "diagnosticTest": false,
+          "welcomeVideo": true,
+          "speedReadingTest": false
+        },
+        "stats": {
+          "wordSpeed": {
+            "firstWordSpeed": 0,
+            "averageWordSpeed": 0,
+            "bestWordSpeed": 0,
+            "lastWordSpeed": 0,
+            "totalWordSpeedReports": 0
+          },
+          "diagnostics": {},
+          "comprehension": {
+            "totalComprehensionReports": 0,
+            "lastComprehension": 0,
+            "averageComprehension": 0
+          },
+          "videos": {}
+        },
+        "counters": {
+          "diagnostics": 0,
+          "practices": 0,
+          "videos": 0,
+          "brainEyeCoordination": 0,
+          "speedRead": 0
+        }
+      },
+      "email": "bcoward@enrolllmentstrategies.net",
+      "lastName": "Coward",
+      "license": {
+        "purchaseDate": 1636669822240,
+        "id": "RAhiWid7gs7PgBma9Vkm",
+        "expirationDate": 1652221822240,
+        "activationDate": 1636669822240,
+        "status": "ACTIVE",
+        "orderId": "beta_testing",
+        "type": null
+      },
+      "testType": "gmat",
+      "firstName": "Barbara",
+      "licenseId": "RAhiWid7gs7PgBma9Vkm",
+      "level": 1,
+      "difficultLevel": "college",
+      "id": "DxNxNL8WFgQ0rF9VVhrUAs30ZPR2"
+    },
+    "license": {
+      "id": "RAhiWid7gs7PgBma9Vkm",
+      "expirationDate": 1652221822240,
+      "timestamp": 1636669822240,
+      "userId": "DxNxNL8WFgQ0rF9VVhrUAs30ZPR2",
+      "status": "ACTIVE",
+      "orderId": "beta_testing",
+      "purchaseDate": 1636669822240,
+      "activationDate": 1636669822240,
+      "user": {
+        "testType": "gmat",
+        "lastSeen": null,
+        "id": "DxNxNL8WFgQ0rF9VVhrUAs30ZPR2",
+        "picture": null,
+        "firstName": "Barbara",
+        "lastName": "Coward",
+        "difficultLevel": "college",
+        "email": "bcoward@enrolllmentstrategies.net"
+      },
+      "durationDays": 90
+    }
+  },
+  {
+    "user": {
+      "testType": "gmat",
+      "difficultLevel": "college",
+      "examDate": "",
+      "lastName": "Paliao",
+      "schoolName": "",
+      "phone": "+5541995937610",
+      "license": {
+        "status": "ACTIVE",
+        "orderId": "beta_testing",
+        "activationDate": 1640610012417,
+        "purchaseDate": 1640610012417,
+        "type": null,
+        "id": "E9U3evSBLN8tIezPcXw0",
+        "expirationDate": 1656162012417
+      },
+      "activity": {
+        "tutorial": {
+          "diagnosticTest": true,
+          "welcomeVideo": true,
+          "speedReadingTest": true,
+          "tutorialVideo": true
+        },
+        "counters": {
+          "brainEyeCoordination": 1,
+          "speedRead": 4,
+          "practices": 0,
+          "diagnostics": 1,
+          "videos": 19
+        },
+        "stats": {
+          "diagnostics": {
+            "gmat": [
+              {
+                "order": 0,
+                "diagnosticId": "-M-xX_Wkk_07H8fleSwa",
+                "totalTime": 11500,
+                "diagnosticResultId": "M7MsVjncvtShECQxkwEl",
+                "name": "GMAT Pre Test",
+                "totalScore": 1,
+                "totalOfQuestions": 6,
+                "scorePercentage": 16
+              }
+            ]
+          },
+          "testResults": [
+            {
+              "resultId": "ooPelYdIhjCg9FQPuLFW",
+              "wordSpeed": 963,
+              "category": "college",
+              "timestamp": 1634486551334,
+              "essayId": "-Map7KnHze20E2Z3zYYD",
+              "comprehension": 33,
+              "type": "speed-read"
+            },
+            {
+              "type": "speed-read",
+              "category": "college",
+              "comprehension": 0,
+              "essayId": "-M29wg-ZPfqDzjIG998f",
+              "timestamp": 1635876095384,
+              "wordSpeed": 743,
+              "resultId": "5pQ9EecVoYi2R1zZVYqL"
+            },
+            {
+              "comprehension": 0,
+              "category": "college",
+              "timestamp": 1635876270932,
+              "essayId": "-M39p4JsJeUuaCcX6d7O",
+              "wordSpeed": 529,
+              "resultId": "UR3f1RASBJw536yZzplq",
+              "type": "speed-read"
+            },
+            {
+              "timestamp": 1639964101879,
+              "wordSpeed": 567,
+              "essayId": "-M2A53Yqtnoeqrc40KpO",
+              "resultId": "5eJkxqXLdFkzrdtHCska",
+              "type": "speed-read",
+              "comprehension": 0,
+              "category": "college"
+            },
+            {
+              "wordSpeed": 550,
+              "timestamp": 1640953616953,
+              "comprehension": 0,
+              "resultId": "VvFU1DsuoU0Td30UmzV8",
+              "type": "brain-eye-coordination",
+              "essayId": "-M29wg-ZPfqDzjIG998f",
+              "category": "college"
+            }
+          ],
+          "wordSpeed": {
+            "bestWordSpeed": 567,
+            "totalWordSpeedReports": 4,
+            "firstWordSpeed": 963,
+            "averageWordSpeed": 700.5,
+            "lastWordSpeed": 567
+          },
+          "videos": {
+            "ZWIn3iRV": true,
+            "c9wywH0k": true,
+            "EFk9hUEG": true,
+            "NECzcY5C": true,
+            "hZqmGxNb": true,
+            "nkQZlu4P": true,
+            "i73kP2Kb": true,
+            "QslWNgU0": true,
+            "QWNAa3dz": true,
+            "yMz9mp2E": true,
+            "3nQyI6Nj": true,
+            "iwgbezO6": true,
+            "rCZxy6YG": true,
+            "G2QB6Bd4": true,
+            "o6n69NkD": true,
+            "o8nd43XR": true,
+            "jQGuIKT7": true,
+            "Y4c1RdRw": true
+          },
+          "comprehension": {
+            "totalComprehensionReports": 5,
+            "averageComprehension": 6.6,
+            "lastComprehension": 0
+          }
+        }
+      },
+      "level": 1,
+      "email": "andre_paliao@hotmail.com",
+      "lastSeen": 1640831581191,
+      "firstName": "André",
+      "picture": "https://firebasestorage.googleapis.com/v0/b/mindflow-1e15b.appspot.com/o/users%2FIAiDpxcTLEQmZ0bowAzpEMeQ9733%2Fpic.jpg?alt=media&token=50c7b977-3dff-4469-ac75-3954513345ff",
+      "id": "IAiDpxcTLEQmZ0bowAzpEMeQ9733"
+    },
+    "license": {
+      "id": "E9U3evSBLN8tIezPcXw0",
+      "durationDays": 90,
+      "orderId": "beta_testing",
+      "status": "ACTIVE",
+      "activationDate": 1640610012417,
+      "user": {
+        "testType": "gmat",
+        "id": "IAiDpxcTLEQmZ0bowAzpEMeQ9733",
+        "difficultLevel": "college",
+        "firstName": "André",
+        "lastSeen": 1640831581191,
+        "picture": "https://firebasestorage.googleapis.com/v0/b/mindflow-1e15b.appspot.com/o/users%2FIAiDpxcTLEQmZ0bowAzpEMeQ9733%2Fpic.jpg?alt=media&token=50c7b977-3dff-4469-ac75-3954513345ff",
+        "lastName": "Paliao",
+        "email": "andre_paliao@hotmail.com"
+      },
+      "expirationDate": 1656162012417,
+      "timestamp": 1640610012417,
+      "purchaseDate": 1640610012417,
+      "userId": "IAiDpxcTLEQmZ0bowAzpEMeQ9733"
+    }
+  },
+  {
+    "user": {
+      "lastName": "Rolim",
+      "firstName": "Marcela",
+      "activity": {
+        "tutorial": {
+          "diagnosticTest": false,
+          "tutorialVideo": false,
+          "welcomeVideo": true,
+          "speedReadingTest": false
+        },
+        "stats": {
+          "testResults": [
+            {
+              "timestamp": 1638363496910,
+              "type": "speed-read",
+              "comprehension": 0,
+              "essayId": "-Map7KnHze20E2Z3zYYD",
+              "category": "college",
+              "resultId": "StEcpJNRxKcqq23c9iHB",
+              "wordSpeed": 809
+            }
+          ],
+          "videos": {},
+          "wordSpeed": {
+            "totalWordSpeedReports": 1,
+            "lastWordSpeed": 809,
+            "averageWordSpeed": 809,
+            "firstWordSpeed": 809,
+            "bestWordSpeed": 809
+          },
+          "diagnostics": {},
+          "comprehension": {
+            "averageComprehension": 0,
+            "lastComprehension": 0,
+            "totalComprehensionReports": 1
+          }
+        },
+        "counters": {
+          "diagnostics": 0,
+          "practices": 0,
+          "brainEyeCoordination": 0,
+          "videos": 0,
+          "speedRead": 1
+        }
+      },
+      "testType": "gmat",
+      "email": "marcelaribas7@gmail.com",
+      "license": {
+        "type": null,
+        "orderId": "beta_testing",
+        "id": "eUcOR7uzR9k9yI1u4ACH",
+        "activationDate": 1640610012510,
+        "expirationDate": 1656162012510,
+        "status": "ACTIVE",
+        "purchaseDate": 1640610012510
+      },
+      "difficultLevel": "college",
+      "level": 2,
+      "id": "K6xAfe1QkeeISqGJWw3J9SzhiFC2"
+    },
+    "license": {
+      "id": "eUcOR7uzR9k9yI1u4ACH",
+      "purchaseDate": 1640610012510,
+      "userId": "K6xAfe1QkeeISqGJWw3J9SzhiFC2",
+      "orderId": "beta_testing",
+      "timestamp": 1640610012510,
+      "status": "ACTIVE",
+      "expirationDate": 1656162012510,
+      "activationDate": 1640610012510,
+      "user": {
+        "lastName": "Rolim",
+        "difficultLevel": "college",
+        "email": "marcelaribas7@gmail.com",
+        "id": "K6xAfe1QkeeISqGJWw3J9SzhiFC2",
+        "lastSeen": null,
+        "firstName": "Marcela",
+        "testType": "gmat",
+        "picture": null
+      },
+      "durationDays": 90
+    }
+  },
+  {
+    "user": {
+      "license": {
+        "status": "ACTIVE",
+        "id": "9BWAw5NbWPpL0VPXPSFH",
+        "activationDate": 1640610012653,
+        "expirationDate": 1656162012653,
+        "type": null,
+        "purchaseDate": 1640610012653,
+        "orderId": "beta_testing"
+      },
+      "level": 1,
+      "difficultLevel": "college",
+      "email": "ashtynrankin@gmail.com",
+      "testType": "gmat",
+      "lastName": "Rankin",
+      "firstName": "Ashtyn",
+      "activity": {
+        "tutorial": {
+          "speedReadingTest": false,
+          "diagnosticTest": false,
+          "tutorialVideo": false,
+          "welcomeVideo": false
+        },
+        "stats": {
+          "comprehension": {
+            "totalComprehensionReports": 0,
+            "lastComprehension": 0,
+            "averageComprehension": 0
+          },
+          "wordSpeed": {
+            "lastWordSpeed": 0,
+            "totalWordSpeedReports": 0,
+            "firstWordSpeed": 0,
+            "bestWordSpeed": 0,
+            "averageWordSpeed": 0
+          },
+          "diagnostics": {},
+          "videos": {}
+        },
+        "counters": {
+          "videos": 0,
+          "practices": 0,
+          "brainEyeCoordination": 0,
+          "diagnostics": 0,
+          "speedRead": 0
+        }
+      },
+      "id": "NyhHN1bb84ZWwwFbTIfIZgtmcIv1"
+    },
+    "license": {
+      "id": "9BWAw5NbWPpL0VPXPSFH",
+      "status": "ACTIVE",
+      "orderId": "beta_testing",
+      "expirationDate": 1656162012653,
+      "userId": "NyhHN1bb84ZWwwFbTIfIZgtmcIv1",
+      "activationDate": 1640610012653,
+      "purchaseDate": 1640610012653,
+      "timestamp": 1640610012653,
+      "durationDays": 90,
+      "user": {
+        "picture": null,
+        "lastSeen": null,
+        "email": "ashtynrankin@gmail.com",
+        "testType": "gmat",
+        "difficultLevel": "college",
+        "firstName": "Ashtyn",
+        "id": "NyhHN1bb84ZWwwFbTIfIZgtmcIv1",
+        "lastName": "Rankin"
+      }
+    }
+  },
+  {
+    "user": {
+      "level": 1,
+      "email": "glassmusicsound@gmail.com",
+      "activity": {
+        "stats": {
+          "wordSpeed": {
+            "totalWordSpeedReports": 0,
+            "lastWordSpeed": 0,
+            "bestWordSpeed": 0,
+            "averageWordSpeed": 0,
+            "firstWordSpeed": 0
+          },
+          "videos": {},
+          "diagnostics": {},
+          "comprehension": {
+            "lastComprehension": 0,
+            "averageComprehension": 0,
+            "totalComprehensionReports": 0
+          }
+        },
+        "counters": {
+          "videos": 0,
+          "practices": 0,
+          "brainEyeCoordination": 0,
+          "speedRead": 0,
+          "diagnostics": 0
+        },
+        "tutorial": {
+          "tutorialVideo": false,
+          "speedReadingTest": false,
+          "diagnosticTest": false,
+          "welcomeVideo": false
+        }
+      },
+      "licenseId": "joSHITXWK0AC3TsoGhSO",
+      "difficultLevel": "college",
+      "firstName": "Katie",
+      "license": {
+        "activationDate": 1636595121694,
+        "expirationDate": 1652147121694,
+        "status": "ACTIVE",
+        "purchaseDate": 1636595121694,
+        "id": "joSHITXWK0AC3TsoGhSO",
+        "orderId": "beta_testing",
+        "type": null
+      },
+      "lastName": "Down",
+      "testType": "gmat",
+      "id": "PAwmACrkYBcd0CYGUAGMVf0aGeI2"
+    },
+    "license": {
+      "id": "joSHITXWK0AC3TsoGhSO",
+      "purchaseDate": 1636595121694,
+      "status": "ACTIVE",
+      "userId": "PAwmACrkYBcd0CYGUAGMVf0aGeI2",
+      "activationDate": 1636595121694,
+      "durationDays": 90,
+      "expirationDate": 1652147121694,
+      "timestamp": 1636595121694,
+      "orderId": "beta_testing",
+      "user": {
+        "difficultLevel": "college",
+        "lastName": "Down",
+        "picture": null,
+        "email": "glassmusicsound@gmail.com",
+        "lastSeen": null,
+        "firstName": "Katie",
+        "id": "PAwmACrkYBcd0CYGUAGMVf0aGeI2",
+        "testType": "gmat"
+      }
+    }
+  },
+  {
+    "user": {
+      "level": 1,
+      "lastName": "McGibbon",
+      "difficultLevel": "college",
+      "firstName": "Mike",
+      "activity": {
+        "stats": {
+          "wordSpeed": {
+            "lastWordSpeed": 463,
+            "bestWordSpeed": 463,
+            "firstWordSpeed": 463,
+            "totalWordSpeedReports": 1,
+            "averageWordSpeed": 463
+          },
+          "diagnostics": {},
+          "comprehension": {
+            "totalComprehensionReports": 1,
+            "lastComprehension": 66,
+            "averageComprehension": 66
+          },
+          "videos": {},
+          "testResults": [
+            {
+              "comprehension": 66,
+              "resultId": "49fW6I2ryCwx6tElesua",
+              "type": "speed-read",
+              "essayId": "-Map7KnHze20E2Z3zYYD",
+              "timestamp": 1637254336443,
+              "wordSpeed": 463,
+              "category": "college"
+            }
+          ]
+        },
+        "counters": {
+          "brainEyeCoordination": 0,
+          "videos": 0,
+          "practices": 0,
+          "diagnostics": 0,
+          "speedRead": 1
+        },
+        "tutorial": {
+          "diagnosticTest": false,
+          "welcomeVideo": true,
+          "speedReadingTest": true,
+          "tutorialVideo": false
+        }
+      },
+      "licenseId": "jQW4FAdfdqGrQKJRIEvq",
+      "testType": "gmat",
+      "license": {
+        "activationDate": 1637253929138,
+        "status": "ACTIVE",
+        "type": null,
+        "purchaseDate": 1637253929138,
+        "orderId": "beta_testing",
+        "id": "jQW4FAdfdqGrQKJRIEvq",
+        "expirationDate": 1652805929138
+      },
+      "email": "mike.mcgibbon@gmail.com",
+      "id": "Zsgdu9RjGccQqQB04Y2n4BIM0IA2"
+    },
+    "license": {
+      "id": "jQW4FAdfdqGrQKJRIEvq",
+      "timestamp": 1637253929138,
+      "user": {
+        "picture": null,
+        "lastSeen": null,
+        "firstName": "Mike",
+        "email": "mike.mcgibbon@gmail.com",
+        "lastName": "McGibbon",
+        "difficultLevel": "college",
+        "id": "Zsgdu9RjGccQqQB04Y2n4BIM0IA2",
+        "testType": "gmat"
+      },
+      "expirationDate": 1652805929138,
+      "purchaseDate": 1637253929138,
+      "userId": "Zsgdu9RjGccQqQB04Y2n4BIM0IA2",
+      "status": "ACTIVE",
+      "orderId": "beta_testing",
+      "durationDays": 90,
+      "activationDate": 1637253929138
+    }
+  },
+  {
+    "user": {
+      "testType": "gmat",
+      "lastName": "de Oliveira",
+      "firstName": "Gabriel",
+      "license": {
+        "purchaseDate": 1637798400000,
+        "orderId": "beta_testing",
+        "activationDate": 1637798400000,
+        "status": "ACTIVE",
+        "expirationDate": 1766620800000,
+        "id": "EXlywF6bz5XY2ojdUu61",
+        "type": null
+      },
+      "level": 1,
+      "email": "biewxw@gmail.com",
+      "difficultLevel": "college",
+      "licenseId": "EXlywF6bz5XY2ojdUu61",
+      "activity": {
+        "counters": {
+          "brainEyeCoordination": 0,
+          "speedRead": 0,
+          "diagnostics": 0,
+          "practices": 0,
+          "videos": 0
+        },
+        "tutorial": {
+          "welcomeVideo": false,
+          "diagnosticTest": false,
+          "tutorialVideo": false,
+          "speedReadingTest": false
+        },
+        "stats": {
+          "diagnostics": {},
+          "videos": {},
+          "comprehension": {
+            "lastComprehension": 0,
+            "averageComprehension": 0,
+            "totalComprehensionReports": 0
+          },
+          "wordSpeed": {
+            "totalWordSpeedReports": 0,
+            "averageWordSpeed": 0,
+            "lastWordSpeed": 0,
+            "firstWordSpeed": 0,
+            "bestWordSpeed": 0
+          }
+        }
+      },
+      "id": "cPel4wR5S7fgy39GD785WucsKDv1"
+    },
+    "license": {
+      "id": "EXlywF6bz5XY2ojdUu61",
+      "durationDays": 120,
+      "timestamp": 1638216630973,
+      "user": {
+        "picture": null,
+        "testType": "gmat",
+        "lastSeen": null,
+        "email": "biewxw@gmail.com",
+        "lastName": "de Oliveira",
+        "firstName": "Gabriel",
+        "id": "cPel4wR5S7fgy39GD785WucsKDv1",
+        "difficultLevel": "college"
+      },
+      "orderId": "beta_testing",
+      "expirationDate": 1766620800000,
+      "purchaseDate": 1637798400000,
+      "activationDate": 1637798400000,
+      "userId": "cPel4wR5S7fgy39GD785WucsKDv1",
+      "status": "ACTIVE"
+    }
+  },
+  {
+    "user": {
+      "email": "abrown@testprepny.com",
+      "phone": "",
+      "activity": {
+        "counters": {
+          "videos": 0,
+          "speedRead": 0,
+          "practices": 0,
+          "diagnostics": 1,
+          "brainEyeCoordination": 0
+        },
+        "tutorial": {
+          "diagnosticTest": true,
+          "welcomeVideo": true,
+          "tutorialVideo": true,
+          "speedReadingTest": false
+        },
+        "stats": {
+          "diagnostics": {
+            "lsat": [
+              {
+                "totalOfQuestions": 6,
+                "name": "LSAT Pre Test",
+                "diagnosticId": "-M0HBz4EQiYtcIkDm5Sz",
+                "order": 0,
+                "totalTime": 0,
+                "diagnosticResultId": "5nSurqbvQwSodyy7RE8X",
+                "scorePercentage": 0,
+                "totalScore": 0
+              }
+            ]
+          },
+          "videos": {},
+          "comprehension": {
+            "totalComprehensionReports": 0,
+            "averageComprehension": 0,
+            "lastComprehension": 0
+          },
+          "wordSpeed": {
+            "bestWordSpeed": 0,
+            "averageWordSpeed": 0,
+            "firstWordSpeed": 0,
+            "lastWordSpeed": 0,
+            "totalWordSpeedReports": 0
+          }
+        }
+      },
+      "testType": "lsat",
+      "examDate": "",
+      "level": 1,
+      "schoolName": "",
+      "firstName": "Alan",
+      "difficultLevel": "college",
+      "lastName": "Brown",
+      "license": {
+        "purchaseDate": 1640610012924,
+        "type": null,
+        "expirationDate": 1656162012924,
+        "activationDate": 1640610012924,
+        "id": "8i4KtUHBVhzWumWJqAzt",
+        "status": "ACTIVE",
+        "orderId": "beta_testing"
+      },
+      "id": "nt3ryW2WCbRcmrINCjC9P5pZ4eB2"
+    },
+    "license": {
+      "id": "8i4KtUHBVhzWumWJqAzt",
+      "timestamp": 1640610012924,
+      "durationDays": 90,
+      "activationDate": 1640610012924,
+      "user": {
+        "lastName": "Brown",
+        "difficultLevel": "college",
+        "id": "nt3ryW2WCbRcmrINCjC9P5pZ4eB2",
+        "picture": null,
+        "email": "abrown@testprepny.com",
+        "testType": "lsat",
+        "lastSeen": null,
+        "firstName": "Alan"
+      },
+      "status": "ACTIVE",
+      "orderId": "beta_testing",
+      "expirationDate": 1656162012924,
+      "userId": "nt3ryW2WCbRcmrINCjC9P5pZ4eB2",
+      "purchaseDate": 1640610012924
+    }
+  },
+  {
+    "user": {
+      "schoolName": "Juilliard ",
+      "level": 1,
+      "email": "aliciamullane@gmail.com",
+      "difficultLevel": "college",
+      "licenseId": "1XrA2sInk6JmCrW0BBnd",
+      "firstName": "Alicia",
+      "testType": "gmat",
+      "phone": "+3102201950___",
+      "activity": {
+        "counters": {
+          "diagnostics": 0,
+          "speedRead": 0,
+          "practices": 0,
+          "videos": 2,
+          "brainEyeCoordination": 0
+        },
+        "stats": {
+          "diagnostics": {},
+          "videos": {
+            "nkQZlu4P": true
+          },
+          "wordSpeed": {
+            "lastWordSpeed": 0,
+            "bestWordSpeed": 0,
+            "totalWordSpeedReports": 0,
+            "firstWordSpeed": 0,
+            "averageWordSpeed": 0
+          },
+          "comprehension": {
+            "totalComprehensionReports": 0,
+            "lastComprehension": 0,
+            "averageComprehension": 0
+          }
+        },
+        "tutorial": {
+          "diagnosticTest": false,
+          "tutorialVideo": false,
+          "speedReadingTest": false,
+          "welcomeVideo": false
+        }
+      },
+      "examDate": "2021-12-01",
+      "lastName": "Mullane",
+      "license": {
+        "expirationDate": 1653965721649,
+        "status": "ACTIVE",
+        "type": null,
+        "orderId": "beta_testing",
+        "id": "1XrA2sInk6JmCrW0BBnd",
+        "activationDate": 1638413721649,
+        "purchaseDate": 1638413721649
+      },
+      "id": "toVmrIDxReQtpDf2DdPJgYwl0I73"
+    },
+    "license": {
+      "id": "1XrA2sInk6JmCrW0BBnd",
+      "timestamp": 1638413721649,
+      "purchaseDate": 1638413721649,
+      "orderId": "beta_testing",
+      "user": {
+        "id": "toVmrIDxReQtpDf2DdPJgYwl0I73",
+        "lastName": "Mullane",
+        "picture": null,
+        "lastSeen": null,
+        "email": "aliciamullane@gmail.com",
+        "difficultLevel": "college",
+        "testType": "gmat",
+        "firstName": "Alicia"
+      },
+      "durationDays": 90,
+      "activationDate": 1638413721649,
+      "userId": "toVmrIDxReQtpDf2DdPJgYwl0I73",
+      "status": "ACTIVE",
+      "expirationDate": 1653965721649
+    }
+  },
+  {
+    "user": {
+      "difficultLevel": "college",
+      "license": {
+        "expirationDate": 1656162012990,
+        "purchaseDate": 1640610012990,
+        "status": "ACTIVE",
+        "id": "KsN7EdLzvJypFK9xG0XW",
+        "orderId": "beta_testing",
+        "type": null,
+        "activationDate": 1640610012990
+      },
+      "activity": {
+        "tutorial": {
+          "diagnosticTest": false,
+          "welcomeVideo": true,
+          "speedReadingTest": false,
+          "tutorialVideo": true
+        },
+        "counters": {
+          "brainEyeCoordination": 0,
+          "practices": 0,
+          "videos": 1,
+          "diagnostics": 0,
+          "speedRead": 0
+        },
+        "stats": {
+          "comprehension": {
+            "totalComprehensionReports": 0,
+            "averageComprehension": 0,
+            "lastComprehension": 0
+          },
+          "diagnostics": {},
+          "videos": {
+            "G0szGxhZ": true
+          },
+          "wordSpeed": {
+            "averageWordSpeed": 0,
+            "totalWordSpeedReports": 0,
+            "bestWordSpeed": 0,
+            "lastWordSpeed": 0,
+            "firstWordSpeed": 0
+          }
+        }
+      },
+      "lastName": "Sapir",
+      "firstName": "Bara",
+      "email": "bara@citytestprep.com",
+      "level": 2,
+      "testType": "gmat",
+      "id": "y3S5Yc9LALbdoklIiLuiS7fjKox2"
+    },
+    "license": {
+      "id": "KsN7EdLzvJypFK9xG0XW",
+      "purchaseDate": 1640610012990,
+      "status": "ACTIVE",
+      "userId": "y3S5Yc9LALbdoklIiLuiS7fjKox2",
+      "durationDays": 90,
+      "activationDate": 1640610012990,
+      "timestamp": 1640610012990,
+      "orderId": "beta_testing",
+      "expirationDate": 1656162012990,
+      "user": {
+        "id": "y3S5Yc9LALbdoklIiLuiS7fjKox2",
+        "lastName": "Sapir",
+        "email": "bara@citytestprep.com",
+        "lastSeen": null,
+        "picture": null,
+        "difficultLevel": "college",
+        "testType": "gmat",
+        "firstName": "Bara"
+      }
+    }
+  }
+]

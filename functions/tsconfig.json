@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "outDir": "lib",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
+    "skipLibCheck": true,
+    "noUnusedParameters": false,
+    "baseUrl": ".",
+    "paths": {
+      "types": ["../src/types/index.ts"]
+    }
+  },
+  "compileOnSave": true,
+  "include": ["src", "src/**/*.ts", "src/**/*.html", "../src/types/*.ts"]
+}

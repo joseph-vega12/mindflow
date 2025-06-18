@@ -1,0 +1,422 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>? - Mindflow</title>
+  <style>
+    img {
+      border: none;
+      -ms-interpolation-mode: bicubic;
+      max-width: 100%;
+    }
+
+    body {
+      background-color: #f6f6f6;
+      font-family: sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 0;
+      padding: 0;
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    table {
+      border-collapse: separate;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+      width: 100%;
+    }
+
+    table td {
+      font-family: sans-serif;
+      font-size: 14px;
+      vertical-align: top;
+    }
+
+    .body {
+      background-color: #05314A;
+      width: 100%;
+    }
+
+    .container {
+      display: block;
+      margin: 0 auto !important;
+      max-width: 580px;
+      padding: 10px;
+      width: 580px;
+    }
+
+    /* This should also be a block element, so that it will fill 100% of the .container */
+    .content {
+      box-sizing: border-box;
+      display: block;
+      margin: 0 auto;
+      max-width: 580px;
+      padding: 10px;
+    }
+
+    .main {
+      width: 100%;
+      background: #ffffff;
+      border-radius: 4px;
+    }
+
+    .wrapper {
+      box-sizing: border-box;
+      padding: 5px;
+    }
+
+    .button-wrapper {
+      text-align: center;
+    }
+
+    .message-wrapper {
+      padding: 15px 30px;
+    }
+
+    .content-block {
+      padding-bottom: 10px;
+      padding-top: 10px;
+    }
+
+    .footer {
+      clear: both;
+      margin-top: 10px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .footer td,
+    .footer p,
+    .footer span,
+    .footer a {
+      color: #999999;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      color: #000000;
+      font-family: sans-serif;
+      font-weight: 400;
+      line-height: 1.4;
+      margin: 0;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 35px;
+      font-weight: 300;
+      text-align: center;
+      text-transform: capitalize;
+    }
+
+    p,
+    ul,
+    ol {
+      color: #000000;
+      font-family: sans-serif;
+      font-size: 14px;
+      font-weight: normal;
+      margin: 0;
+      margin-bottom: 15px;
+    }
+
+    b {
+      font-size: 15px;
+    }
+
+    p li,
+    ul li,
+    ol li {
+      list-style-position: inside;
+      margin-left: 5px;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: underline;
+    }
+
+    button {
+      cursor: pointer;
+      padding: 13px;
+      border-radius: 10px;
+      background-color: #05314A;
+      color: white;
+      outline: none;
+      border: none;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .logo {
+      height: 150px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+    }
+
+    .last {
+      margin-bottom: 0;
+    }
+
+    .first {
+      margin-top: 0;
+    }
+
+    .align-center {
+      text-align: center;
+    }
+
+    .align-right {
+      text-align: right;
+    }
+
+    .align-left {
+      text-align: left;
+    }
+
+    .clear {
+      clear: both;
+    }
+
+    .mt0 {
+      margin-top: 0;
+    }
+
+    .mb0 {
+      margin-bottom: 0;
+    }
+
+    .goodbye {
+      text-decoration: underline;
+      font-style: italic;
+      color: #05314A;
+    }
+
+    .preheader {
+      color: transparent;
+      display: none;
+      height: 0;
+      max-height: 0;
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      mso-hide: all;
+      visibility: hidden;
+      width: 0;
+    }
+
+    .powered-by a {
+      text-decoration: none;
+    }
+
+    hr {
+      border: 0;
+      border-bottom: 1px solid #f6f6f6;
+      margin: 20px 0;
+    }
+
+    @media only screen and (max-width: 620px) {
+      table.body h1 {
+        font-size: 28px !important;
+        margin-bottom: 10px !important;
+      }
+
+      table.body p,
+      table.body ul,
+      table.body ol,
+      table.body td,
+      table.body span,
+      table.body a {
+        font-size: 16px !important;
+      }
+
+      table.body .wrapper,
+      table.body .article {
+        padding: 10px !important;
+      }
+
+      table.body .content {
+        padding: 0 !important;
+      }
+
+      table.body .container {
+        padding: 0 !important;
+        width: 100% !important;
+      }
+
+      table.body .main {
+        border-left-width: 0 !important;
+        border-radius: 0 !important;
+        border-right-width: 0 !important;
+      }
+
+      table.body .btn a {
+        width: 100% !important;
+      }
+
+      table.body .img-responsive {
+        height: auto !important;
+        max-width: 100% !important;
+        width: auto !important;
+      }
+    }
+
+    @media all {
+      .ExternalClass {
+        width: 100%;
+      }
+
+      .ExternalClass,
+      .ExternalClass p,
+      .ExternalClass span,
+      .ExternalClass font,
+      .ExternalClass td,
+      .ExternalClass div {
+        line-height: 100%;
+      }
+
+      .apple-link a {
+        color: inherit !important;
+        font-family: inherit !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+        text-decoration: none !important;
+      }
+
+      #MessageViewBody a {
+        color: inherit;
+        text-decoration: none;
+        font-size: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+      }
+
+      .btn-primary table td:hover {
+        background-color: #34495e !important;
+      }
+
+      .btn-primary a:hover {
+        background-color: #34495e !important;
+        border-color: #34495e !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="">
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+    <tr>
+      <td>&nbsp;</td>
+      <td class="container">
+        <div class="content">
+
+          <table role="presentation" class="main">
+            <tr>
+              <td class="wrapper">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td>
+                      <img class="logo" width="100%"
+                        src="https://firebasestorage.googleapis.com/v0/b/mindflow-1e15b.appspot.com/o/email%2Fheader-4.jpg?alt=media&token=0a24dcc6-1993-4c53-9eaf-4a73bb0f9b1d">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="message-wrapper">
+                      <p><b>Hi {{ user.firstName }},</b></p>
+                      <p>Welcome to MindFlow!</p>
+                      <p>We’re excited that you’re about to immerse yourself in our comprehensive mindful speed reading
+                        course, MindFlow! Not only will you read faster without compromising comprehension but you’ll
+                        also gain effective mindset skills to enter the best test-taking mindset. These new techniques
+                        will bolster your tool box to help you perform better and faster on your upcoming high-stakes
+                        admissions tests - and will also serve you in school and in life. </p>
+                      <p>Starting a new project is always exciting; here is something really important we want you to
+                        consider. Most people don’t complete online courses.
+                        <b>A recent 2019 study by the Massachusetts
+                          Institute of Technology revealed that over the previous five years, online courses recorded an
+                          average dropout rate of about 96%.</b>
+                      </p>
+                      <p>
+                        Gulp! Sorry to lay out the truth right afer you’ve invested in an online course! However, we’re
+                        realistic and learn from what works. Iit is important to be realistic and set in motion a plan
+                        for your success. We’ll keep in touch with you by email, but we’ve observed that the folks who
+                        make an anti-procrastination plan and budget time to study are more likely to finish!
+                      </p>
+                      <p>
+                        So... don't delay! Set yourself up for success. Here are the steps to follow for MindFlow
+                        results.
+                      </p>
+                      <p>
+                        Set up days and times in your calendar you can work on MindFlow
+                        Please start NOW by going through our Orintation video/material.
+                        Complete our pre test diagnostic and speed reading tst, and getting familiar with the platform
+                        itself.
+                      </p>
+                      <p>
+                        This will give us a baseline of where you’re starting off now and move you into the training
+                        resources which will set you up to have a great learning experience and to actually make good on
+                        your investment. These resources include:
+                      </p>
+                      <ul>
+                        <li>Step-by-step videos on HOW to read faster</li>
+                        <li>Practice material to master speed reading techniques</li>
+                        <li>Data collection tracking your reading speed progress and levels of comprehension</li>
+                        <li>Diagnostic tests and Reading Speed assessments to keep track of your time-based performance
+                        </li>
+                        <li>A mindfulness channel to improve your outlook and emotionally regulate</li>
+                        <li> Our Facebook group, which is a GREAT resource for finding like-minded students, asking
+                          questions, arranging accountability or co-working buddies, etc.</li>
+                      </ul>
+
+                      <p>Pop on into the course using the button below to get started!</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="button-wrapper">
+                      <a href="{{baseUrl}}">
+                        <button>Get started!</button>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="message-wrapper">
+                      <p class="goodbye">Mindfully Yours,<br />
+                        Bara Sapir and the MindFlow Team
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+          <div class="footer">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="content-block">
+                  <span class="apple-link">MindFlow Speed Reading</span>
+                  <br>
+                  Got questions? You can get in touch here: <a
+                    href="mailto:support@mindflowspeedreading.com">support@mindflowspeedreading.com</a>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+        </div>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+</body>
+
+</html>
