@@ -87,12 +87,13 @@ export const DiagnosticTest: FC<Props> = () => {
     }
   );
 
+
   const createDiagnosticResult = useMutation(
     async () => {
       const defaultDiagnosticResult = {
         finished: false,
 
-        diagnosticId: diagnosticQuery?.data?.id,
+        diagnosticId: diagnosticId,
 
         name: diagnosticQuery?.data?.name,
         category: diagnosticQuery?.data?.category,
@@ -117,9 +118,9 @@ export const DiagnosticTest: FC<Props> = () => {
       }
 
       // TEMP FIX - Need to fix how this is handled
-      if (defaultDiagnosticResult?.diagnosticId) {
-        addDoc(collection(db, 'diagnosticResults'), defaultDiagnosticResult);
-      }
+      // if (defaultDiagnosticResult?.diagnosticId) {
+      addDoc(collection(db, 'diagnosticResults'), defaultDiagnosticResult);
+      // }
     },
     {
       onSuccess() {
