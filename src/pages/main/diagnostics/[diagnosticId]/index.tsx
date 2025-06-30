@@ -152,7 +152,8 @@ export const DiagnosticTest: FC<Props> = () => {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       onSuccess(result: DiagnosticResultDocumentWithId | null) {
-        if (!result) {
+        if (!result && diagnosticQuery.data) {
+          // if (!result) {
           createDiagnosticResult.mutate();
           return;
         }
