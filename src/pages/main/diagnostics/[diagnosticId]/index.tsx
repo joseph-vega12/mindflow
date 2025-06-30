@@ -87,7 +87,6 @@ export const DiagnosticTest: FC<Props> = () => {
     }
   );
 
-
   const createDiagnosticResult = useMutation(
     async () => {
       const defaultDiagnosticResult = {
@@ -95,9 +94,9 @@ export const DiagnosticTest: FC<Props> = () => {
 
         diagnosticId: diagnosticId,
 
-        name: diagnosticQuery?.data?.name,
-        category: diagnosticQuery?.data?.category,
-        order: diagnosticQuery?.data?.order,
+        name: diagnosticQuery?.data?.name || null,
+        category: diagnosticQuery?.data?.category || null,
+        order: diagnosticQuery?.data?.order || null,
 
         answers: [],
         answersTime: [],
@@ -117,10 +116,7 @@ export const DiagnosticTest: FC<Props> = () => {
         defaultDiagnosticResult.businessId = user?.userDetails?.businessId;
       }
 
-      // TEMP FIX - Need to fix how this is handled
-      // if (defaultDiagnosticResult?.diagnosticId) {
       addDoc(collection(db, 'diagnosticResults'), defaultDiagnosticResult);
-      // }
     },
     {
       onSuccess() {
@@ -213,6 +209,9 @@ export const DiagnosticTest: FC<Props> = () => {
       answersTime
     };
 
+
+    console.log(diagnosticResult, `diagnosticResult from the handleSaveQuestion`)
+    return
     updateDiagnosticResult(diagnosticResult);
   };
 
