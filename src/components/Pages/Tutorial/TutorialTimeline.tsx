@@ -102,7 +102,8 @@ export const TutorialTimeline: FC<Props> = ({
   let scorePercentage = null;
 
   if (diagnosticResultsQuery.data.length !== 0) {
-    scorePercentage = _.find(diagnosticResultsQuery?.data).result.scorePercentage;
+    console.log(diagnosticResultsQuery?.data, `data from here`)
+    scorePercentage = _.find(diagnosticResultsQuery?.data)?.result?.scorePercentage;
   }
 
   return (
