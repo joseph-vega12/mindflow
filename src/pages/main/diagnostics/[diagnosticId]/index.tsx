@@ -92,11 +92,11 @@ export const DiagnosticTest: FC<Props> = () => {
       const defaultDiagnosticResult = {
         finished: false,
 
-        diagnosticId: diagnosticQuery?.data?.id,
+        diagnosticId: diagnosticQuery.data.id,
 
-        name: diagnosticQuery?.data?.name,
-        category: diagnosticQuery?.data?.category,
-        order: diagnosticQuery?.data?.order,
+        name: diagnosticQuery.data.name,
+        category: diagnosticQuery.data.category,
+        order: diagnosticQuery.data.order,
 
         answers: [],
         answersTime: [],
@@ -153,15 +153,13 @@ export const DiagnosticTest: FC<Props> = () => {
       refetchOnMount: false,
       onSuccess(result: DiagnosticResultDocumentWithId | null) {
         if (!result) {
-          if (diagnosticQuery.data) {
-            createDiagnosticResult.mutate();
-          }
+          createDiagnosticResult.mutate();
           return;
         }
 
         if (result.finished) {
           toast.info('You already done this diagnostic!');
-          return navigate(`/diagnostics/${result.diagnosticId}/result`);
+          return navigate(`/diagnostics/${result?.diagnosticId}/result`);
         }
 
         return result;
@@ -211,9 +209,6 @@ export const DiagnosticTest: FC<Props> = () => {
       answersTime
     };
 
-
-    console.log(diagnosticResult, `diagnosticResult from the handleSaveQuestion`)
-    return
     updateDiagnosticResult(diagnosticResult);
   };
 
