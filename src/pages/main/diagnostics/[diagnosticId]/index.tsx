@@ -152,15 +152,16 @@ export const DiagnosticTest: FC<Props> = () => {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       onSuccess(result: DiagnosticResultDocumentWithId | null) {
-        if (!result && diagnosticQuery.data) {
-          // if (!result) {
-          createDiagnosticResult.mutate();
+        if (!result) {
+          if (diagnosticQuery.data) {
+            createDiagnosticResult.mutate();
+          }
           return;
         }
 
         if (result.finished) {
           toast.info('You already done this diagnostic!');
-          return navigate(`/diagnostics/${result?.diagnosticId}/result`);
+          return navigate(`/diagnostics/${result.diagnosticId}/result`);
         }
 
         return result;
