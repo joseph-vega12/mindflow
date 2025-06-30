@@ -92,11 +92,11 @@ export const DiagnosticTest: FC<Props> = () => {
       const defaultDiagnosticResult = {
         finished: false,
 
-        diagnosticId: diagnosticId,
+        diagnosticId: diagnosticQuery?.data?.id,
 
-        name: diagnosticQuery?.data?.name || null,
-        category: diagnosticQuery?.data?.category || null,
-        order: diagnosticQuery?.data?.order || null,
+        name: diagnosticQuery?.data?.name,
+        category: diagnosticQuery?.data?.category,
+        order: diagnosticQuery?.data?.order,
 
         answers: [],
         answersTime: [],
