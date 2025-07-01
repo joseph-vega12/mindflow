@@ -116,7 +116,11 @@ export const DiagnosticTest: FC<Props> = () => {
         defaultDiagnosticResult.businessId = user?.userDetails?.businessId;
       }
 
-      addDoc(collection(db, 'diagnosticResults'), defaultDiagnosticResult);
+
+      if (diagnosticQuery?.data?.id) {
+        console.log(defaultDiagnosticResult, `defaultDiagnosticResult in here`)
+        addDoc(collection(db, 'diagnosticResults'), defaultDiagnosticResult);
+      }
     },
     {
       onSuccess() {
