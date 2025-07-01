@@ -92,11 +92,11 @@ export const DiagnosticTest: FC<Props> = () => {
       const defaultDiagnosticResult = {
         finished: false,
 
-        diagnosticId: diagnosticQuery.data.id,
+        diagnosticId: diagnosticQuery?.data?.id,
 
-        name: diagnosticQuery.data.name,
-        category: diagnosticQuery.data.category,
-        order: diagnosticQuery.data.order,
+        name: diagnosticQuery?.data?.name,
+        category: diagnosticQuery?.data?.category,
+        order: diagnosticQuery?.data?.order,
 
         answers: [],
         answersTime: [],
@@ -199,7 +199,8 @@ export const DiagnosticTest: FC<Props> = () => {
     finished: boolean;
   }) => {
     if (!diagnosticResultQuery.data) {
-      return toast.error('An error has occurred');
+      return
+      // return toast.error('An error has occurred');
     }
 
     const diagnosticResult: DiagnosticResult = {
