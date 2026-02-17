@@ -78,7 +78,7 @@ export const PublicSpeedReadHome: FC = () => {
   const [createdLead, setCreatedLead] = useState<LeadDocumentWithId | null>(null);
 
   const [reCaptchaVerificationToken, setReCaptchaVerificationToken] = useState('');
-    const [lead, setLead] = useState({
+  const [lead, setLead] = useState({
     name: '',
     email: '',
     programPreparation: false,
@@ -254,7 +254,7 @@ export const PublicSpeedReadHome: FC = () => {
   return (
     <>
       <BasePage background="white" spacing="md" position="relative" zIndex="1">
-      <GoogleReCaptcha onVerify={(token) => setReCaptchaVerificationToken(token)} />
+        <GoogleReCaptcha onVerify={(token) => setReCaptchaVerificationToken(token)} />
         <PageLoading isLoading={freeEssaysQuery.isLoading}>
           <BasePageTitle
             width="60%"
@@ -346,81 +346,81 @@ export const PublicSpeedReadHome: FC = () => {
             </ChakraFlex>
           </BasePageTitle>
           <ChakraFlex maxWidth={{ xs: '100%', lg: '60%' }} marginX="auto" flexDirection="column">
-        <>
-                <ChakraFlex flexDirection="column">
-                  {(!mobileStep || mobileStep === 1) && (
-                    <>
-                      <ChakraHeading marginBottom="md" textStyle="title-with-border-bottom" fontSize="md">
-                        Welcome!
-                      </ChakraHeading>
-                      <ChakraText>
-                        This is{' '}
-                        <ChakraText as="span">
-                          MindFlow's free speed reading test.
-                        </ChakraText>{' '}
-                        To begin, choose the level of the test you want to take, set the test preferences, input your
-                        information on the form and hit start to begin!
-                      </ChakraText>
-                    </>
-                  )}
-                  {(!mobileStep || mobileStep === 2) && (
-                    <SpeedReadConfiguration
-                      onChange={(configuration) => setTextConfiguration(configuration)}
-                      essay={selectedEssay}
-                    />
-                  )}
-                  {/* {!mobileStep && <ChakraDivider marginY="lg" />} */}
-                  <ChakraFlex flexDirection="column" paddingTop="36px">
-                    {(!mobileStep || (mobileStep === 3)) && (
-                      <ChakraFlex flexDirection="column">
-                        <ChakraFlex alignItems="left">
-                          <ChakraHeading marginBottom="md" fontSize="md" width="250px">
-                            Input your information
-                          </ChakraHeading>
-                          <ChakraDivider borderColor="gray.400" paddingTop="md"/>
-                        </ChakraFlex>
-                        <ChakraFlex flexDirection={{ xs: 'column', lg: 'row' }}>
-                          <ChakraFormControl
-                            isRequired
-                            maxWidth="355px"
-                            marginBottom={{ xs: 'sm', lg: 'none' }}
-                            marginRight={{ xs: 'none', lg: 'xl' }}
-                          >
-                            <ChakraFormLabel>Name</ChakraFormLabel>
-                            <ChakraInput
-                              placeholder="Student"
-                              borderRadius="sm"
-                              value={lead.name}
-                              onChange={(ev) => setLead((prevState) => ({ ...prevState, name: ev.target.value }))}
-                            />
-                          </ChakraFormControl>
+            <>
+              <ChakraFlex flexDirection="column">
+                {(!mobileStep || mobileStep === 1) && (
+                  <>
+                    <ChakraHeading marginBottom="md" textStyle="title-with-border-bottom" fontSize="md">
+                      Welcome!
+                    </ChakraHeading>
+                    <ChakraText>
+                      This is{' '}
+                      <ChakraText as="span">
+                        MindFlow's free speed reading test.
+                      </ChakraText>{' '}
+                      To begin, choose the level of the test you want to take, set the test preferences, input your
+                      information on the form and hit start to begin!
+                    </ChakraText>
+                  </>
+                )}
+                {(!mobileStep || mobileStep === 2) && (
+                  <SpeedReadConfiguration
+                    onChange={(configuration) => setTextConfiguration(configuration)}
+                    essay={selectedEssay}
+                  />
+                )}
+                {/* {!mobileStep && <ChakraDivider marginY="lg" />} */}
+                <ChakraFlex flexDirection="column" paddingTop="36px">
+                  {(!mobileStep || (mobileStep === 3)) && (
+                    <ChakraFlex flexDirection="column">
+                      <ChakraFlex alignItems="left">
+                        <ChakraHeading marginBottom="md" fontSize="md" width="250px">
+                          Input your information
+                        </ChakraHeading>
+                        <ChakraDivider borderColor="gray.400" paddingTop="md" />
+                      </ChakraFlex>
+                      <ChakraFlex flexDirection={{ xs: 'column', lg: 'row' }}>
+                        <ChakraFormControl
+                          isRequired
+                          maxWidth="355px"
+                          marginBottom={{ xs: 'sm', lg: 'none' }}
+                          marginRight={{ xs: 'none', lg: 'xl' }}
+                        >
+                          <ChakraFormLabel>Name</ChakraFormLabel>
+                          <ChakraInput
+                            placeholder="Student"
+                            borderRadius="sm"
+                            value={lead.name}
+                            onChange={(ev) => setLead((prevState) => ({ ...prevState, name: ev.target.value }))}
+                          />
+                        </ChakraFormControl>
 
-                          <ChakraFormControl isRequired maxWidth="355px">
-                            <ChakraFormLabel>Email</ChakraFormLabel>
-                            <ChakraInput
-                              type="email"
-                              placeholder="student@mindflow.com"
-                              borderRadius="sm"
-                              value={lead.email}
-                              onChange={(ev) => setLead((prevState) => ({ ...prevState, email: ev.target.value }))}
-                            />
-                          </ChakraFormControl>
-                        </ChakraFlex>
-                        <ChakraText color="ui.600" fontWeight="bold" marginBottom={{ xs: 'none', lg: 'lg' }} marginTop="md">
-                          <ChakraText as="span" color="#FF714D">
-                            Instruction:
-                          </ChakraText>{' '}
-                          Read the following essay the way you normally read, after you finish it, press the{' '}
-                          <ChakraText as="span" color="green.500">
-                            "finish button".
-                          </ChakraText>{' '}
-                          <ChakraText as="span" display={{ xs: 'none', lg: 'unset' }}>
-                          </ChakraText>
+                        <ChakraFormControl isRequired maxWidth="355px">
+                          <ChakraFormLabel>Email</ChakraFormLabel>
+                          <ChakraInput
+                            type="email"
+                            placeholder="student@mindflow.com"
+                            borderRadius="sm"
+                            value={lead.email}
+                            onChange={(ev) => setLead((prevState) => ({ ...prevState, email: ev.target.value }))}
+                          />
+                        </ChakraFormControl>
+                      </ChakraFlex>
+                      <ChakraText color="ui.600" fontWeight="bold" marginBottom={{ xs: 'none', lg: 'lg' }} marginTop="md">
+                        <ChakraText as="span" color="#FF714D">
+                          Instruction:
+                        </ChakraText>{' '}
+                        Read the following essay the way you normally read, after you finish it, press the{' '}
+                        <ChakraText as="span" color="green.500">
+                          "finish button".
+                        </ChakraText>{' '}
+                        <ChakraText as="span" display={{ xs: 'none', lg: 'unset' }}>
                         </ChakraText>
-                        <ChakraText display={{ xs: 'unset', lg: 'none' }} marginY="sm" fontWeight="bold">
-                          Click start to begin your free speed reading test
-                        </ChakraText>
-                        {/*
+                      </ChakraText>
+                      <ChakraText display={{ xs: 'unset', lg: 'none' }} marginY="sm" fontWeight="bold">
+                        Click start to begin your free speed reading test
+                      </ChakraText>
+                      {/*
                         <ChakraText display={{ xs: 'unset', lg: 'none' }} fontWeight="bold">
                           <ChakraText as="span" color="orange.500">
                             Warning:{' '}
@@ -428,12 +428,12 @@ export const PublicSpeedReadHome: FC = () => {
                           You wont be able to restart your test after you begin it.
                         </ChakraText>
                         */}
-                      </ChakraFlex>
-                    )}
+                    </ChakraFlex>
+                  )}
 
-                    {(!mobileStep || mobileStep === 3) && (
-                      <ChakraFlex flexDirection="column">
-                        {/*
+                  {(!mobileStep || mobileStep === 3) && (
+                    <ChakraFlex flexDirection="column">
+                      {/*
                         <ChakraHeading
                           fontSize="md"
                           textStyle="title-with-border-bottom"
@@ -509,7 +509,7 @@ export const PublicSpeedReadHome: FC = () => {
                         */}
 
 
-                        {/*
+                      {/*
                         {lead?.programPreparation && (
                           <ChakraFlex flexDirection={{ xs: 'column', lg: 'row' }}>
                             <ChakraFormControl
@@ -572,40 +572,40 @@ export const PublicSpeedReadHome: FC = () => {
                           </ChakraFlex>
                         )}
                         */}
-                        <ChakraButton
-                          size="md"
-                          width="140px"
-                          marginY="xl"
-                          colorScheme="blue"
-                          boxShadow="0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19)"
-                          display={{ xs: 'none', lg: 'flex' }}
-                          leftIcon={<Icon name={!canStartTest || !!invalidLead ? 'lock' : 'play_dotted_circle'} />}
-                          isDisabled={!canStartTest || !!invalidLead}
-                          isLoading={isCreating}
-                          onClick={handleTestStart}
-                        >
-                          Start Test
-                        </ChakraButton>
-                      </ChakraFlex>
-                    )}
-                  </ChakraFlex>
-                  {hasStarted && (
-                    <>
-                      {time > 0 ? (
-                        <ChakraFlex width="100%" marginTop={{ xs: 'none', lg: 'lg' }} justifyContent="center">
-                          <ChakraHeading>{time.toString()[0]}</ChakraHeading>
-                        </ChakraFlex>
-                      ) : (
-                        <SpeedReadTest
-                          {...textConfiguration}
-                          essay={selectedEssay}
-                          onFinishTest={() => handleTestFinish()}
-                        />
-                      )}
-                    </>
+                      <ChakraButton
+                        size="md"
+                        width="140px"
+                        marginY="xl"
+                        colorScheme="blue"
+                        boxShadow="0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19)"
+                        display={{ xs: 'none', lg: 'flex' }}
+                        leftIcon={<Icon name={!canStartTest || !!invalidLead ? 'lock' : 'play_dotted_circle'} />}
+                        isDisabled={!canStartTest || !!invalidLead}
+                        isLoading={isCreating}
+                        onClick={handleTestStart}
+                      >
+                        Start Test
+                      </ChakraButton>
+                    </ChakraFlex>
                   )}
                 </ChakraFlex>
-              </>
+                {hasStarted && (
+                  <>
+                    {time > 0 ? (
+                      <ChakraFlex width="100%" marginTop={{ xs: 'none', lg: 'lg' }} justifyContent="center">
+                        <ChakraHeading>{time.toString()[0]}</ChakraHeading>
+                      </ChakraFlex>
+                    ) : (
+                      <SpeedReadTest
+                        {...textConfiguration}
+                        essay={selectedEssay}
+                        onFinishTest={() => handleTestFinish()}
+                      />
+                    )}
+                  </>
+                )}
+              </ChakraFlex>
+            </>
 
             {!hasStarted && !hasFinished && (
               <ChakraFlex display={{ xs: 'flex', lg: 'none' }} alignItems="center" flexDirection="column">
@@ -631,7 +631,7 @@ export const PublicSpeedReadHome: FC = () => {
               </ChakraFlex>
             )}
 
-          <ChakraDivider marginY="lg" />
+            <ChakraDivider marginY="lg" />
             {(hasFinished) && (
               <SpeedReadResult lead={createdLead} />
             )}

@@ -17,6 +17,8 @@ import React, { FC, useMemo, useState } from 'react';
 import { CustomEssay } from 'types';
 import { HtmlEditor } from 'components/common';
 import { toast } from 'react-toastify';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from 'lib/firebase/firebaseInit';
 import { useAuthContext, useFirebaseContext } from 'lib/firebase';
 
 export interface Props {
@@ -53,10 +55,11 @@ export const UploadCustomEssayModal: FC<Props> = ({ isOpen, onClose, onOpen }) =
           .split(' ')
           .filter((s) => s).length,
         userId: user?.uid ?? '',
-        timestamp: +new Date()
+        timestamp: +new Date(),
+        category: user.userDetails.difficultLevel
       };
 
-      await firestore.collection('customEssays').add(newCustomText);
+      await addDoc(collection(db, 'customEssays'), newCustomText);
 
       await queryClient.invalidateQueries('essays');
     },

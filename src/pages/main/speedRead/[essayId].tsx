@@ -211,36 +211,36 @@ export const SpeedReadText: FC = () => {
     comprehension?: number
   ) => {
     // @ts-ignore
-    if (!essay?.isCustom) {
-      const testSpeedResult: SpeedTestResult = {
-        essayId,
-        wordSpeed,
-        type: 'speed-read',
-        wordsNumber: essay?.totalOfSentences ?? 0,
-        timestamp: +new Date(),
-        // @ts-ignore
-        category: essay?.category,
+    // if (essay?.isCustom) {
+    const testSpeedResult: SpeedTestResult = {
+      essayId,
+      wordSpeed,
+      type: 'speed-read',
+      wordsNumber: essay?.totalOfSentences ?? 0,
+      timestamp: +new Date(),
+      // @ts-ignore
+      category: essay?.category,
 
-        user: {
-          id: user?.uid ?? null,
-          firstName: user?.userDetails?.firstName,
-          lastName: user?.userDetails?.lastName,
-          picture: user?.userDetails?.picture ?? null
-        },
-        userId: user?.uid ?? ''
-      };
+      user: {
+        id: user?.uid ?? null,
+        firstName: user?.userDetails?.firstName,
+        lastName: user?.userDetails?.lastName,
+        picture: user?.userDetails?.picture ?? null
+      },
+      userId: user?.uid ?? ''
+    };
 
-      if (comprehensionAnswers?.length) {
-        testSpeedResult.comprehension = comprehension;
-        testSpeedResult.comprehensionAnswers = comprehensionAnswers;
-      }
-
-      if (user?.userDetails?.businessId) {
-        testSpeedResult.businessId = user?.userDetails?.businessId;
-      }
-
-      createSpeedTestResult(testSpeedResult);
+    if (comprehensionAnswers?.length) {
+      testSpeedResult.comprehension = comprehension;
+      testSpeedResult.comprehensionAnswers = comprehensionAnswers;
     }
+
+    if (user?.userDetails?.businessId) {
+      testSpeedResult.businessId = user?.userDetails?.businessId;
+    }
+
+    createSpeedTestResult(testSpeedResult);
+    // }
 
     // @ts-ignore
     if (essay?.preTest) {

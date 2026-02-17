@@ -1,10 +1,10 @@
-import { FirestoreDocumentWithId } from 'types';
+import { FirestoreDocumentWithId, userFriendlyDifficultLevel } from 'types';
 
 import { Essay } from './Essay';
 
 export interface CustomEssay extends Omit<Essay, 'difficult' | 'category' | 'speedTestOnly' | 'preTest'> {
   userId: string;
-
+  category: string;
   timestamp: number;
 }
 

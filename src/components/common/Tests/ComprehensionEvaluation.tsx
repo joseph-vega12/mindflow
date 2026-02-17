@@ -4,6 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 
 import { EssayComprehensionAnswerOption, EssayDocumentWithId } from 'types';
 import { percentage } from 'lib/utils';
+import { toast } from 'react-toastify';
 
 interface Props {
   essay?: EssayDocumentWithId;
@@ -17,7 +18,9 @@ export const ComprehensionEvaluation: FC<Props> = ({ essay, onSubmit, onSkip }) 
   const [answers, setAnswers] = useState<EssayComprehensionAnswerOption[]>([]);
 
   const handleSubmit = () => {
-    if (answers.filter((ans) => ans).length !== essay?.questions?.length) return null;
+    if (answers.filter((ans) => ans).length !== essay?.questions?.length) {
+      return toast.error('Please answer all questions');
+    };
 
     const correctAnswers = answers
       .map((ans, idx) => ans === get(essay, ['questions', idx, 'correctAnswer']))
