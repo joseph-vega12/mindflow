@@ -97,6 +97,7 @@ export const TextsTable: FC<Props> = ({ data, isLoading }) => {
           if (textResult) {
             return (
               <Button
+                disabled={row.isCustom}
                 variant="outline"
                 colorScheme="gray"
                 color="blue.900"

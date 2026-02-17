@@ -83,7 +83,7 @@ export const SpeedReadResult: FC<{}> = () => {
       const answer = get(essayResultQuery.data, ['comprehensionAnswers', index]);
 
       const count =
-        question.correctAnswer === essayResultQuery.data.comprehensionAnswers[index]
+        question.correctAnswer === essayResultQuery.data.comprehensionAnswers?.[index]
           ? (totalOfCorrect += 1)
           : totalOfCorrect;
 
