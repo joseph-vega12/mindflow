@@ -18,6 +18,8 @@ export interface License {
 
   orderId: string;
 
+  districtId?: string;
+
   durationDays?: number;
 
   // All the dates are epochTime

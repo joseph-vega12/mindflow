@@ -42,6 +42,9 @@ export interface UserDetails {
   >;
 
   business?: Pick<BusinessDocumentWithId, 'id' | 'name' | 'email' | 'timestamp'>;
+
+  /** Set when user signed in via Clever SSO; profile editing is limited. */
+  cleverUserId?: string;
 }
 
 export type UserDetailsWithId = FirestoreDocumentWithId<UserDetails>;

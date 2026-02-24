@@ -78,6 +78,9 @@ export const UserProfilePage: FC<UserProfilePageProps> = () => {
     updateUserMutation();
   };
 
+  const cleverUserId = user?.userDetails?.cleverUserId;
+  const isCleverUser = Boolean(cleverUserId);
+
   return (
     <BasePage spacing="md">
       <BasePageTitle title="Profile" paddingBottom="md" />
@@ -99,120 +102,133 @@ export const UserProfilePage: FC<UserProfilePageProps> = () => {
             </Text>
             <Divider borderColor="teal.500" />
           </ChakraFlex>
-          <SimpleGrid width="100%" columns={2} gap="md">
-            <ChakraFlex flexDirection="column">
-              <FormLabel>Profile picture</FormLabel>
-              <Controller
-                name="picture"
-                control={control}
-                disabled={isLoading}
-                render={({ field: { value, onChange } }) => (
-                  <ImageUpload
-                    height="328px"
-                    value={value}
-                    imageName={user?.uid?.toString()}
-                    onChange={(imageUrl) => onChange(imageUrl)}
-                  />
-                )}
-              />
-            </ChakraFlex>
-            <SimpleGrid gap="md">
-              <ChakraFlex width="100%" alignItems="center">
-                <ChakraFlex width="100%" flexDirection="column" marginRight="sm">
-                  <FormLabel>First name</FormLabel>
-                  <Input type="firstName" name="firstName" {...register("firstName")} disabled={isLoading} borderColor="gray.500" />
-                </ChakraFlex>
-                <ChakraFlex width="100%" flexDirection="column" marginLeft="sm">
-                  <FormLabel>Last name</FormLabel>
-                  <Input type="lastName" name="lastName" {...register("lastName")} disabled={isLoading} borderColor="gray.500" />
-                </ChakraFlex>
-              </ChakraFlex>
-              <ChakraFlex width="100%" flexDirection="column">
-                <FormLabel>Email</FormLabel>
-                <Input type="email" name="email" {...register("email")} disabled borderColor="gray.500" />
-              </ChakraFlex>
-              <ChakraFlex width="100%" flexDirection="column">
-                <FormLabel>Phone</FormLabel>
-                <Input
-                  required
-                  name="phone"
-                  height="40px"
-                  paddingX="md"
-                  border="sm"
-                  borderRadius="md"
-                  borderColor="gray.500"
-                  transitionDuration="0.3s"
-                  _focus={{
-                    outlineColor: 'blue.500'
-                  }}
+          <SimpleGrid width="100%" columns={isCleverUser ? 1 : 2} gap="md">
+            {!isCleverUser && (
+              <ChakraFlex flexDirection="column">
+                <FormLabel>Profile picture</FormLabel>
+                <Controller
+                  name="picture"
+                  control={control}
                   disabled={isLoading}
-                  ref={withMask("9999999999999")}
-                  {...register("phone")}
-                  style={{ border: "1px solid #999" }}
+                  render={({ field: { value, onChange } }) => (
+                    <ImageUpload
+                      height="328px"
+                      value={value}
+                      imageName={user?.uid?.toString()}
+                      onChange={(imageUrl) => onChange(imageUrl)}
+                    />
+                  )}
                 />
               </ChakraFlex>
-              <ChakraFlex width="100%">
-                <ChakraFlex width="100%" flexDirection="column" marginRight="sm">
-                  <FormLabel>Current password</FormLabel>
-                  <Input type="password" name="currentPassword" {...register("currentPassword")} />
-                </ChakraFlex>
-                <ChakraFlex width="100%" flexDirection="column" marginLeft="sm">
-                  <FormLabel>New password</FormLabel>
-                  <Input type="password" name="newPassword" {...register("newPassword")} />
-                </ChakraFlex>
+            )}
+            {isCleverUser ? (
+              <ChakraFlex flexDirection="column">
+                <FormLabel>Clever User ID</FormLabel>
+                <Input disabled value={cleverUserId ?? ''} isReadOnly borderColor="gray.500" />
               </ChakraFlex>
-            </SimpleGrid>
+            ) : (
+              <SimpleGrid gap="md">
+                <ChakraFlex width="100%" alignItems="center">
+                  <ChakraFlex width="100%" flexDirection="column" marginRight="sm">
+                    <FormLabel>First name</FormLabel>
+                    <Input type="firstName" name="firstName" {...register("firstName")} disabled={isLoading} borderColor="gray.500" />
+                  </ChakraFlex>
+                  <ChakraFlex width="100%" flexDirection="column" marginLeft="sm">
+                    <FormLabel>Last name</FormLabel>
+                    <Input type="lastName" name="lastName" {...register("lastName")} disabled={isLoading} borderColor="gray.500" />
+                  </ChakraFlex>
+                </ChakraFlex>
+                <ChakraFlex width="100%" flexDirection="column">
+                  <FormLabel>Email</FormLabel>
+                  <Input type="email" name="email" {...register("email")} disabled borderColor="gray.500" />
+                </ChakraFlex>
+                <ChakraFlex width="100%" flexDirection="column">
+                  <FormLabel>Phone</FormLabel>
+                  <Input
+                    required
+                    name="phone"
+                    height="40px"
+                    paddingX="md"
+                    border="sm"
+                    borderRadius="md"
+                    borderColor="gray.500"
+                    transitionDuration="0.3s"
+                    _focus={{
+                      outlineColor: 'blue.500'
+                    }}
+                    disabled={isLoading}
+                    ref={withMask("9999999999999")}
+                    {...register("phone")}
+                    style={{ border: "1px solid #999" }}
+                  />
+                </ChakraFlex>
+                <ChakraFlex width="100%">
+                  <ChakraFlex width="100%" flexDirection="column" marginRight="sm">
+                    <FormLabel>Current password</FormLabel>
+                    <Input type="password" name="currentPassword" {...register("currentPassword")} />
+                  </ChakraFlex>
+                  <ChakraFlex width="100%" flexDirection="column" marginLeft="sm">
+                    <FormLabel>New password</FormLabel>
+                    <Input type="password" name="newPassword" {...register("newPassword")} />
+                  </ChakraFlex>
+                </ChakraFlex>
+              </SimpleGrid>
+            )}
           </SimpleGrid>
         </ChakraFlex>
-        <ChakraFlex width="100%" alignItems="center" flexDirection="column">
-          <ChakraFlex width="100%" alignItems="center" mt={6} mb={4}>
-            <Text color="blue.500" fontSize="xl" fontWeight="bold" marginRight="md" whiteSpace="nowrap">
-              Account Data
-            </Text>
-            <Divider borderColor="teal.500" />
-          </ChakraFlex>
-          <SimpleGrid width="100%" columns={2} gap="md">
-            <ChakraFlex flexDirection="column">
-              <FormLabel>School/Business</FormLabel>
-              <Input disabled name="schoolName" borderColor="gray.500" {...register("schoolName")} />
+        {!isCleverUser && (
+          <>
+            <ChakraFlex width="100%" alignItems="center" flexDirection="column">
+              <ChakraFlex width="100%" alignItems="center" mt={6} mb={4}>
+                <Text color="blue.500" fontSize="xl" fontWeight="bold" marginRight="md" whiteSpace="nowrap">
+                  Account Data
+                </Text>
+                <Divider borderColor="teal.500" />
+              </ChakraFlex>
+              <SimpleGrid width="100%" columns={2} gap="md">
+                <ChakraFlex flexDirection="column">
+                  <FormLabel>School/Business Example</FormLabel>
+                  <Input disabled name="schoolName" borderColor="gray.500" {...register("schoolName")} />
+                </ChakraFlex>
+                <ChakraFlex flexDirection="column">
+                  <FormLabel>Exam date</FormLabel>
+                  <Input disabled type="date" name="examDate" borderColor="gray.500" {...register("examDate")} />
+                </ChakraFlex>
+                <ChakraFlex width="100%" flexDirection="column">
+                  <FormLabel>Difficult level</FormLabel>
+                  <Select type="difficultLevel" name="difficultLevel" {...register("difficultLevel")} isDisabled={true} defaultValue="">
+                    <option value="" disabled>
+                      Not selected
+                    </option>
+                    {Object.keys(difficultTestTypeRelation).map((difficultLevel) => (
+                      <option key={difficultLevel} value={difficultLevel}>
+                        {difficultLevel}
+                      </option>
+                    ))}
+                  </Select>
+                </ChakraFlex>
+                <ChakraFlex width="100%" flexDirection="column">
+                  <FormLabel>Test type</FormLabel>
+                  <Select name="testType" {...register("testType")} isDisabled={true} defaultValue="">
+                    <option value="" disabled>
+                      Not selected
+                    </option>
+                    {testTypes.map((testType) => (
+                      <option key={testType} value={testType}>
+                        {capitalize(testType.replace(/[-|_]/gi, ' '))}
+                      </option>
+                    ))}
+                  </Select>
+                </ChakraFlex>
+              </SimpleGrid>
             </ChakraFlex>
-            <ChakraFlex flexDirection="column">
-              <FormLabel>Exam date</FormLabel>
-              <Input disabled type="date" name="examDate" borderColor="gray.500" {...register("examDate")} />
+            <ChakraFlex width="100%" justifyContent="flex-end" mt={8}>
+              <Button colorScheme="green" type="submit" borderRadius="sm" disabled={isLoading} shadow="md">
+                Save changes
+              </Button>
             </ChakraFlex>
-            <ChakraFlex width="100%" flexDirection="column">
-              <FormLabel>Difficult level</FormLabel>
-              <Select type="difficultLevel" name="difficultLevel" {...register("difficultLevel")} isDisabled={true} defaultValue="">
-                <option value="" disabled>
-                  Not selected
-                </option>
-                {Object.keys(difficultTestTypeRelation).map((difficultLevel) => (
-                  <option key={difficultLevel} value={difficultLevel}>
-                    {difficultLevel}
-                  </option>
-                ))}
-              </Select>
-            </ChakraFlex>
-            <ChakraFlex width="100%" flexDirection="column">
-              <FormLabel>Test type</FormLabel>
-              <Select name="testType" {...register("testType")} isDisabled={true} defaultValue="">
-                <option value="" disabled>
-                  Not selected
-                </option>
-                {testTypes.map((testType) => (
-                  <option key={testType} value={testType}>
-                    {capitalize(testType.replace(/[-|_]/gi, ' '))}
-                  </option>
-                ))}
-              </Select>
-            </ChakraFlex>
-          </SimpleGrid>
-        </ChakraFlex>
-        <ChakraFlex width="100%" justifyContent="flex-end" mt={8}>
-          <Button colorScheme="green" type="submit" borderRadius="sm" disabled={isLoading} shadow="md">
-            Save changes
-          </Button>
-        </ChakraFlex>
+          </>
+        )}
       </chakra.form>
     </BasePage>
   );

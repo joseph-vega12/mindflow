@@ -16,7 +16,7 @@ import { AuthContext } from './AuthContext';
 import { useFirebaseContext } from '../index';
 
 import { Box } from '@chakra-ui/react';
-
+import { useNavigate } from 'react-router-dom';
 interface Props { }
 
 export const AuthProvider: FC<Props> = ({ children }) => {
@@ -25,7 +25,8 @@ export const AuthProvider: FC<Props> = ({ children }) => {
   const [firebaseAuthUser, setFirebaseAuthUser] = useState(null);
   const { firestore } = useFirebaseContext();
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  // const navigate = navigate();
   // const isLoginPage = useMatch('/login');
   // const isPencilLoginPage = useMatch('/pencilSpacesLogin');
   // const isFreeSpeedReadPage = useMatch('/free/speed-read');
@@ -138,7 +139,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
   };
 
   if (error) {
-    return <Box>Unauthorized</Box>;
+    navigate('/login');
   }
 
   return (

@@ -223,8 +223,8 @@ export const SpeedReadText: FC = () => {
 
       user: {
         id: user?.uid ?? null,
-        firstName: user?.userDetails?.firstName,
-        lastName: user?.userDetails?.lastName,
+        firstName: user?.userDetails?.cleverUserId ? (user?.userDetails?.firstName ?? null) : user?.userDetails?.firstName,
+        lastName: user?.userDetails?.cleverUserId ? (user?.userDetails?.lastName ?? null) : user?.userDetails?.lastName,
         picture: user?.userDetails?.picture ?? null
       },
       userId: user?.uid ?? ''

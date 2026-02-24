@@ -15,6 +15,7 @@ import {
   ModalHeader as ChakraModalHeader,
   ModalOverlay as ChakraModalOverlay,
   ModalProps as ChakraModalProps,
+  Select as ChakraSelect,
   SimpleGrid as ChakraSimpleGrid,
   Text as ChakraText
 } from '@chakra-ui/react';
@@ -30,17 +31,27 @@ interface Props extends Omit<ChakraModalProps, 'children'> { }
 interface FormValues {
   numberOfLicenses: number;
   durationDays: number;
+  isForSchoolDistrict: 'yes' | 'no';
+  districtId: string;
 }
 
+type SubmitPayload =
+  | { numberOfLicenses: number; durationDays: number }
+  | { numberOfLicenses: number; durationDays: number; isForSchoolDistrict: 'yes'; districtId: string };
+
 export const BatchLicenseDialog: FC<Props> = ({ isOpen, onClose }) => {
-  const { register, getValues } = useForm<FormValues>({
+  const { register, getValues, watch } = useForm<FormValues>({
     defaultValues: {
       numberOfLicenses: 1,
-      durationDays: 90
+      durationDays: 90,
+      isForSchoolDistrict: 'no',
+      districtId: ''
     }
   });
 
-  const createBatchLicensesMutation = useMutation(async (values: FormValues) => {
+  const isForSchoolDistrict = watch('isForSchoolDistrict') === 'yes';
+
+  const createBatchLicensesMutation = useMutation(async (values: SubmitPayload) => {
     const licensesNumber = Array.from(Array(Number(values.numberOfLicenses)));
     const emptyLicense: License = {
       status: ELicenseStatus.INACTIVE,
@@ -51,6 +62,7 @@ export const BatchLicenseDialog: FC<Props> = ({ isOpen, onClose }) => {
 
       durationDays: Number(values.durationDays),
       purchaseDate: +new Date(),
+      ...('districtId' in values && values.districtId ? { districtId: values.districtId } : {}),
       // activationDate: +new Date(),
 
       timestamp: +new Date()
@@ -122,7 +134,20 @@ export const BatchLicenseDialog: FC<Props> = ({ isOpen, onClose }) => {
   const handleSubmit = () => {
     const values = getValues();
 
-    createBatchLicensesMutation.mutate(values);
+    const payload: SubmitPayload =
+      values.isForSchoolDistrict === 'yes'
+        ? {
+          numberOfLicenses: values.numberOfLicenses,
+          durationDays: values.durationDays,
+          isForSchoolDistrict: 'yes',
+          districtId: values.districtId
+        }
+        : {
+          numberOfLicenses: values.numberOfLicenses,
+          durationDays: values.durationDays
+        };
+
+    createBatchLicensesMutation.mutate(payload);
   };
 
   return (
@@ -158,6 +183,33 @@ export const BatchLicenseDialog: FC<Props> = ({ isOpen, onClose }) => {
                 {...register("durationDays")}
               />
             </ChakraFlex>
+
+            <ChakraFlex flexDirection="column" gridColumn="1 / -1">
+              <ChakraFormLabel>Is this for a school/district?</ChakraFormLabel>
+              <ChakraSelect
+                name="isForSchoolDistrict"
+                borderColor="gray.500"
+                disabled={createBatchLicensesMutation.isLoading}
+                {...register("isForSchoolDistrict")}
+              >
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </ChakraSelect>
+            </ChakraFlex>
+
+            {isForSchoolDistrict && (
+              <ChakraFlex flexDirection="column" gridColumn="1 / -1">
+                <ChakraFormLabel>District ID</ChakraFormLabel>
+                <ChakraInput
+                  type="text"
+                  name="districtId"
+                  placeholder="Enter district ID"
+                  borderColor="gray.500"
+                  disabled={createBatchLicensesMutation.isLoading}
+                  {...register("districtId")}
+                />
+              </ChakraFlex>
+            )}
           </ChakraSimpleGrid>
         </ChakraModalBody>
         <ChakraModalFooter borderTop="sm" borderTopColor="gray.300" justifyContent="space-between">
