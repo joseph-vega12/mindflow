@@ -120,7 +120,7 @@ export const LoginPage: FC<Props> = ({ }) => {
                   >
                     <Box
                       as="img"
-                      src="/login-with-clever.png"
+                      src="https://firebasestorage.googleapis.com/v0/b/mindflow-1e15b.appspot.com/o/login-with-clever.png?alt=media&token=33a7e613-5c17-40ff-82c8-474d0be75643"
                       alt="Log in with Clever"
                       w="100%"
                       maxH="44px"
