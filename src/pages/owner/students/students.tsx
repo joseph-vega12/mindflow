@@ -15,10 +15,32 @@ export const OwnerStudentsPanel: FC = () => {
 
   const values = form.watch();
 
+  const showCleverOnly = values?.showCleverStudents === true;
+
   const studentsQuery = useQuery(
-    ['owner', 'students', values.difficultLevel, values.testType, values.whereDidYouHearAboutUs],
+    [
+      'owner',
+      'students',
+      showCleverOnly ? 'clever' : values.difficultLevel,
+      showCleverOnly ? null : values.testType,
+      showCleverOnly ? null : values.whereDidYouHearAboutUs
+    ],
     async () => {
       const { difficultLevel, testType, whereDidYouHearAboutUs } = values;
+
+      if (showCleverOnly) {
+        const usersQuery = query(
+          collection(db, 'users').withConverter<UserDetailsWithId>({
+            fromFirestore: (doc) => ({
+              id: doc.id,
+              ...(doc.data() as UserDetails)
+            }),
+            toFirestore: (doc: UserDetailsWithId) => doc
+          })
+        );
+        const studentDocs = await getDocs(usersQuery);
+        return studentDocs.docs.map((doc) => doc.data());
+      }
 
       if (difficultLevel || testType || whereDidYouHearAboutUs) {
         const queryKey = difficultLevel ? 'difficultLevel' : testType ? 'testType' : 'whereDidYouHearAboutUs';
@@ -34,32 +56,27 @@ export const OwnerStudentsPanel: FC = () => {
                 };
               },
               toFirestore: (doc: UserDetailsWithId) => doc
-            }), where(queryKey, '==', queryValue),
-          orderBy('firstName')
-        )
+            }),
+          where(queryKey, '==', queryValue)
+        );
 
-        const studentDocs = await getDocs(usersQuery)
+        const studentDocs = await getDocs(usersQuery);
         const students = studentDocs.docs.map((doc) => doc.data());
-
         return students;
       }
 
-      const usersQuery = await query(collection(db, 'users')
-        .withConverter<UserDetailsWithId>({
-          fromFirestore: (doc) => {
-            return {
-              id: doc.id,
-              ...(doc.data() as UserDetails)
-            };
-          },
+      const usersQuery = query(
+        collection(db, 'users').withConverter<UserDetailsWithId>({
+          fromFirestore: (doc) => ({
+            id: doc.id,
+            ...(doc.data() as UserDetails)
+          }),
           toFirestore: (doc: UserDetailsWithId) => doc
-        }), orderBy('firstName')
-      )
+        })
+      );
 
       const studentDocs = await getDocs(usersQuery);
-      const students = studentDocs.docs.map((doc) => doc.data());
-
-      return students;
+      return studentDocs.docs.map((doc) => doc.data());
     },
     {
       refetchOnMount: false,
@@ -67,19 +84,49 @@ export const OwnerStudentsPanel: FC = () => {
     }
   );
 
+  const cleverOnlyList = useMemo(() => {
+    const list = studentsQuery?.data ?? [];
+    return list.filter((student) => Boolean(student.cleverUserId));
+  }, [studentsQuery.data]);
+
+  const uniqueDistrictIds = useMemo(
+    () => [...new Set(cleverOnlyList.map((s) => s.schoolName).filter(Boolean))] as string[],
+    [cleverOnlyList]
+  );
+
   const getFilteredStudents = useMemo(() => {
-    const filteredStudentsBySearch = studentsQuery?.data?.filter(
-      (student) =>
-        student.firstName.toLocaleLowerCase().match(values?.searchStudents?.toLocaleLowerCase()) ||
-        student.lastName.toLocaleLowerCase().match(values?.searchStudents?.toLocaleLowerCase())
-    );
-    return filteredStudentsBySearch ?? [];
-  }, [studentsQuery.data, values.searchStudents]);
+    let list = studentsQuery?.data ?? [];
+    if (showCleverOnly) {
+      list = list.filter((student) => Boolean(student.cleverUserId));
+      const districtIdFilter = values?.districtIdFilter;
+      if (districtIdFilter) {
+        list = list.filter((student) => student.schoolName === districtIdFilter);
+      }
+    }
+    const search = values?.searchStudents?.toLocaleLowerCase() ?? '';
+    const filteredStudentsBySearch = list.filter((student) => {
+      const firstName = (student?.firstName ?? '').toLocaleLowerCase();
+      const lastName = (student?.lastName ?? '').toLocaleLowerCase();
+      const cleverId = (student?.cleverUserId ?? '').toLocaleLowerCase();
+      if (!search) return true;
+      return firstName.includes(search) || lastName.includes(search) || cleverId.includes(search);
+    });
+    return filteredStudentsBySearch;
+  }, [
+    studentsQuery.data,
+    values?.searchStudents,
+    values?.showCleverStudents,
+    values?.districtIdFilter
+  ]);
 
   return (
     <ChakraFlex flexDirection="column">
       <ChakraFlex width="100%" flexDirection="column" marginBottom="lg">
-        <StudentsPanelFilters students={getFilteredStudents} />
+        <StudentsPanelFilters
+          students={getFilteredStudents}
+          uniqueDistrictIds={uniqueDistrictIds}
+          showCleverOnly={showCleverOnly}
+        />
       </ChakraFlex>
       <StudentsPanelListing isLoading={studentsQuery.isLoading} students={getFilteredStudents} />
     </ChakraFlex>

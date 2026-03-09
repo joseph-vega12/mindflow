@@ -10,6 +10,7 @@ import {
 
 import { get } from 'lodash';
 import { useNavigate } from 'react-router-dom';
+import { useFormContext } from 'react-hook-form';
 
 import { formatTimestamp } from 'lib/utils';
 
@@ -23,24 +24,45 @@ interface Props {
 
 export const StudentsPanelListing: FC<Props> = ({ students, isLoading }) => {
   const navigate = useNavigate();
+  const showCleverOnly = useFormContext()?.watch?.('showCleverStudents') === true;
 
   const getTableColumns = useMemo(() => {
-    return [
+    const baseColumns = [
       {
         width: '10%',
         Header: 'Student',
         id: 'name',
-        accessor: (row: UserDetailsWithId) => (
-          <ChakraFlex gridGap="md" alignItems="center">
-            <ChakraAvatar size="sm" src={row.picture}>
-              <ChakraAvatarBadge bottom="25px" boxSize="0.8rem" bg="green.500" />
-            </ChakraAvatar>
-            <ChakraText isTruncated color="gray.600">
-              {row.firstName} {row.lastName}
-            </ChakraText>
-          </ChakraFlex>
-        )
+        accessor: (row: UserDetailsWithId) => {
+          const displayName =
+            row.firstName != null && row.lastName != null
+              ? `${row.firstName} ${row.lastName}`.trim()
+              : row.cleverUserId ?? '—';
+          return (
+            <ChakraFlex gridGap="md" alignItems="center">
+              <ChakraAvatar size="sm" src={row.picture}>
+                <ChakraAvatarBadge bottom="25px" boxSize="0.8rem" bg="green.500" />
+              </ChakraAvatar>
+              <ChakraText isTruncated color="gray.600">
+                {displayName || '—'}
+              </ChakraText>
+            </ChakraFlex>
+          );
+        }
       },
+      ...(showCleverOnly
+        ? [
+            {
+              width: '10%',
+              Header: 'District ID',
+              id: 'districtId',
+              accessor: (row: UserDetailsWithId) => (
+                <ChakraText isTruncated color="gray.600">
+                  {row.schoolName ?? '—'}
+                </ChakraText>
+              )
+            }
+          ]
+        : []),
       {
         width: '10%',
         Header: 'Level',
@@ -135,7 +157,8 @@ export const StudentsPanelListing: FC<Props> = ({ students, isLoading }) => {
         )
       }
     ];
-  }, [students]);
+    return baseColumns;
+  }, [students, showCleverOnly]);
 
   // @ts-ignore
   return <Table isPageable={true} isLoading={isLoading} columns={getTableColumns} data={students} />;
