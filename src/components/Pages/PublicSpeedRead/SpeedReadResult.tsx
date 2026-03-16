@@ -108,7 +108,7 @@ export const SpeedReadResult: FC<SpeedReadResultProps> = ({ lead }) => {
         </ChakraButton>
         <ChakraButton
           colorScheme="blue"
-          onClick={() => push('/free/program')}
+          onClick={() => navigate('/free/program')}
           boxShadow="0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19)"
         >
           Buy Full Program
@@ -162,7 +162,7 @@ export const SpeedReadResult: FC<SpeedReadResultProps> = ({ lead }) => {
             marginRight={{ xs: 'none', lg: 'xl' }}
             marginBottom={{ xs: 'md', lg: 'none' }}
             width={{ xs: '100%', lg: '150px' }}
-            onClick={() => push('/free/program')}
+            onClick={() => navigate('/free/program')}
             boxShadow="0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19)"
           >
             Buy Now

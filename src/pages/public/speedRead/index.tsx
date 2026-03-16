@@ -252,7 +252,7 @@ export const PublicSpeedReadHome: FC = () => {
   }, []);
 
   return (
-    <>
+    <ChakraFlex flexDirection="column" as="main">
       <BasePage background="white" spacing="md" position="relative" zIndex="1">
         <GoogleReCaptcha onVerify={(token) => setReCaptchaVerificationToken(token)} />
         <PageLoading isLoading={freeEssaysQuery.isLoading}>
@@ -618,7 +618,7 @@ export const PublicSpeedReadHome: FC = () => {
                   colorScheme="blue"
                   isLoading={isCreating}
                   isDisabled={mobileStep === 3 && (!canStartTest || !!invalidLead)}
-                  leftIcon={mobileStep === 3 ? <Icon name="lock" /> : <></>}
+                  leftIcon={mobileStep === 3 ? <Icon name="lock" /> : undefined}
                   onClick={() =>
                     mobileStep === 4 ? handleTestStart() : !mobileStep ? setMobileStep(1) : setMobileStep(mobileStep + 1)
                   }
@@ -638,7 +638,7 @@ export const PublicSpeedReadHome: FC = () => {
           </ChakraFlex>
         </PageLoading>
       </BasePage>
-      <Footer></Footer>
-    </>
+      <Footer />
+    </ChakraFlex>
   );
 };
