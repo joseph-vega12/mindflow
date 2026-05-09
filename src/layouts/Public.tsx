@@ -1,11 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, PropsWithChildren } from 'react';
 
 import { Flex as ChakraFlex, Img as ChakraImg, Text as ChakraText } from '@chakra-ui/react';
 
 import { Header } from 'components/layout';
 import { Icon } from 'components/common';
 
-export const PublicLayout: FC = ({ children, ...props }) => {
+type PublicLayoutProps = PropsWithChildren<Record<string, unknown>>;
+
+export const PublicLayout: FC<PublicLayoutProps> = ({ children, ...props }) => {
   return (
     <ChakraFlex width="100%" height="100%" flexDirection="column" padding={{ xs: 'none', lg: 'xl' }} overflow="auto">
       <Header isPublic />

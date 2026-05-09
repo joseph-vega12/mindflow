@@ -9,12 +9,13 @@ import {
 } from '@chakra-ui/react';
 import { ELicenseStatus, ELicenseType, License, LicenseDocumentWithId } from 'types';
 import { toast } from 'react-toastify';
-import { useFirebaseContext } from 'lib/firebase';
 import { useParams } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import axios from 'axios';
+import { collection, doc, writeBatch } from 'firebase/firestore';
+import { db } from 'lib/firebase/firebaseInit';
 
-import { PublicLayout } from 'layouts/Public';
+import { PublicLayout } from '../layouts/Public';
 
 interface RouteParams {
   businessId: string;
@@ -23,8 +24,7 @@ interface RouteParams {
   quantity: string;
 }
 export const BusinessPurchaseAdditionalLicenses: FC = () => {
-  const { firestore } = useFirebaseContext();
-  const { businessId, orderId, provider, quantity } = useParams<RouteParams>();
+  const { businessId, orderId, provider, quantity } = useParams();
 
   const { mutate: createLicensesOnPurchase } = useMutation(async () => {
     // Student License Creation under the Business
@@ -40,12 +40,12 @@ export const BusinessPurchaseAdditionalLicenses: FC = () => {
       timestamp: +new Date()
     };
 
-    const batch = firestore.batch();
+    const batch = writeBatch(db);
     const transactionId = uuidv4();
 
     const licenses: LicenseDocumentWithId[] = [];
     for (const _ of licensesNumber) {
-      const licenseRef = firestore.collection('licenses').doc();
+      const licenseRef = doc(collection(db, 'licenses'));
       batch.set(licenseRef, emptyLicense);
       licenses.push({ id: licenseRef.id, ...emptyLicense, orderId: transactionId });
     }
