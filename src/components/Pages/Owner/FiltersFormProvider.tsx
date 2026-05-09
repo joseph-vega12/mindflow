@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import moment from 'moment';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, PropsWithChildren, useEffect, useState } from 'react';
 
 import { DifficultLevel, TestType } from 'types';
 import { isEqual } from 'lodash';
@@ -12,7 +12,7 @@ export interface AnalyticsFilterForm {
   endDate: string;
 }
 
-export const FiltersFormProvider: FC = ({ children }) => {
+export const FiltersFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const methods = useForm<AnalyticsFilterForm>({
     defaultValues: {
       testType: null,

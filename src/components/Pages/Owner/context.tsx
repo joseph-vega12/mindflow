@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useMemo, useState } from 'react';
+import React, { createContext, FC, PropsWithChildren, useContext, useMemo, useState } from 'react';
 
 import { cloneDeep, uniqBy } from 'lodash';
 
@@ -24,7 +24,7 @@ export interface OwnerContextState {
 
 export const OwnerContext = createContext<OwnerContextState>({});
 
-export const OwnerContextProvider: FC = ({ children }) => {
+export const OwnerContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const [filterStudents, setFilterStudents] = useState<UserDocumentWithId[]>([]);
   const [filterSearch, setFilterSearch] = useState<string>();
   const [filterDifficultLevel, setFilterDifficultLevel] = useState<DifficultLevel>();
