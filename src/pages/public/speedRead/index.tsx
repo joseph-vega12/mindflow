@@ -97,21 +97,22 @@ export const PublicSpeedReadHome: FC = () => {
   });
 
   const canStartTest = useMemo(() => {
-    if (reCaptchaVerificationToken) {
-      if (lead.programPreparation) {
-        return !!(
-          lead.email &&
-          lead.name &&
-          lead.programEducationLevel &&
-          lead.programTestDate &&
-          lead.programTestType
-        );
-      } else {
-        return !!(lead.email && lead.name);
-      }
+    // Add this back, temp fix in order to allow users to start the test without reCaptcha
+    // if (reCaptchaVerificationToken) {
+    if (lead.programPreparation) {
+      return !!(
+        lead.email &&
+        lead.name &&
+        lead.programEducationLevel &&
+        lead.programTestDate &&
+        lead.programTestType
+      );
+    } else {
+      return !!(lead.email && lead.name);
     }
+    // }
 
-    return false;
+    // return false;
   }, [lead]);
 
   const { error: invalidLead } = useMemo(() => leadSchema.validate(lead, {}), [lead]);
