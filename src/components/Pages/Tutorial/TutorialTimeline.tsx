@@ -25,6 +25,7 @@ import { collection, DocumentData, getDocs, query, where, WithFieldValue } from 
 interface Props {
   tutorial: UserTutorial;
   handleStartVideo: (videoType: TutorialVideoType) => void;
+  handleCompleteOnboarding: () => void | Promise<void>;
 
   diagnostic: DiagnosticDocumentWithId;
   essay: EssayDocumentWithId;
@@ -37,6 +38,7 @@ export const TutorialTimeline: FC<Props> = ({
   diagnostic,
   essay,
   handleStartVideo,
+  handleCompleteOnboarding,
   isLoading,
   tutorial,
   wordSpeed
@@ -175,9 +177,10 @@ export const TutorialTimeline: FC<Props> = ({
         <TutorialTimelineItem
           idx={5}
           tutorial={tutorial}
+          tutorialKey="finished"
           isLastItem={true}
           dependsOn={['welcomeVideo', 'speedReadingTest', 'diagnosticTest', 'tutorialVideo']}
-          onClick={() => navigate('/')}
+          onClick={handleCompleteOnboarding}
         >
           <Icon name="complete-onboarding" size="14" mr={4} />
 

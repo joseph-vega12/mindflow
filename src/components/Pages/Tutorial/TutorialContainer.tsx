@@ -39,9 +39,10 @@ export const TutorialContainer: FC<Props> = ({ }) => {
   const userDifficultLevel = user?.userDetails?.difficultLevel;
   const testType = user?.userDetails?.testType ?? '';
 
-  const updateTutorialKeyMutation = useMutation(async (key: keyof UserTutorial) => {
+  const updateTutorialKeyMutation = useMutation(async (update: keyof UserTutorial | Partial<UserTutorial>) => {
     try {
-      const newTutorial = merge(tutorial, { [key]: true });
+      const patch = typeof update === 'string' ? { [update]: true } : update;
+      const newTutorial = merge({}, tutorial, patch);
 
       await setDoc(
         doc(db, 'users', user?.uid),
@@ -53,9 +54,10 @@ export const TutorialContainer: FC<Props> = ({ }) => {
         { merge: true }
       );
 
-      refetchUserDetails();
+      await refetchUserDetails();
     } catch (e) {
       console.log(e);
+      throw e;
     }
   });
 
@@ -207,8 +209,19 @@ export const TutorialContainer: FC<Props> = ({ }) => {
       updateTutorialKeyMutation.mutate('welcomeVideo');
     }
     if (videoType === 'tutorial' && tutorial.speedReadingTest && !tutorial.tutorialVideo) {
-      updateTutorialKeyMutation.mutate('tutorialVideo');
-      updateTutorialKeyMutation.mutate('finished');
+      updateTutorialKeyMutation.mutate({ tutorialVideo: true, finished: true });
+    }
+  };
+
+  const handleCompleteOnboarding = async () => {
+    try {
+      if (!tutorial.finished) {
+        await updateTutorialKeyMutation.mutateAsync({ finished: true });
+      }
+      navigate('/');
+    } catch (e) {
+      toast.error("We couldn't complete onboarding. Please try again.");
+      console.error(e);
     }
   };
 
@@ -222,6 +235,7 @@ export const TutorialContainer: FC<Props> = ({ }) => {
         <TutorialTimeline
           isLoading={isLoading}
           handleStartVideo={handleStartVideo}
+          handleCompleteOnboarding={handleCompleteOnboarding}
           tutorial={tutorial}
           diagnostic={diagnosticQuery.data}
           essay={pretestEssayQuery.data}
