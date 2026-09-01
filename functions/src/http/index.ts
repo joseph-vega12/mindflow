@@ -1,7 +1,9 @@
 import * as express from 'express';
 import * as cors from 'cors';
-import * as functions from 'firebase-functions';
+// import * as functions from 'firebase-functions';
+import { onRequest } from 'firebase-functions/v2/https';
 
+import { apiSecrets } from '../params';
 import { activateSoldLicense } from './activateSoldLicense';
 import { activateExistingLicense } from './activateExistingLicense';
 import { approveBusiness } from './approveBusiness';
@@ -27,6 +29,8 @@ import { sendBusinessStudentLicense } from './sendBusinessStudentLicenseCsv';
 import { manageCoupon } from './manageCoupon';
 import { assignUsersToBusiness } from './assignUsersToBusiness';
 import { createCheckoutSession } from './createCheckoutSession';
+import { oauthCleverAuth } from './oauthCleverAuth';
+import { createDevCustomToken } from './createDevCustomToken';
 
 const app = express();
 
@@ -58,6 +62,8 @@ app.put('/approveBusiness', approveBusiness);
 app.post('/sendLicenseOrderReceipt', sendLicenseOrderReceipt);
 app.post('/sendFeedback', sendFeedback);
 app.post('/createCheckoutSession', createCheckoutSession);
+app.post('/oauthCleverAuth', oauthCleverAuth);
+app.post('/createDevCustomToken', createDevCustomToken);
 
 // app.get('/syncFeedAndTestResults', async (req, res) => {
 //   return res.json(await syncFeedAndTestResults()).end();
@@ -73,4 +79,4 @@ app.post('/createCheckoutSession', createCheckoutSession);
 // });
 
 // Expose Express API as a single Cloud Function:
-export const api = functions.https.onRequest(app);
+export const apiV2 = onRequest({ secrets: apiSecrets }, app);

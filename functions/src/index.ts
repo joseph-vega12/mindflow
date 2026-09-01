@@ -1,5 +1,5 @@
 import * as moduleAlias from 'module-alias';
-import * as admin from 'firebase-admin';
+import * as admin from 'firebase-admin'
 
 function bootstrap() {
   // Resolving the path to the functions folder
@@ -21,6 +21,6 @@ function bootstrap() {
 
 bootstrap();
 
-export { api } from './http';
+export { apiV2 } from './http';
 export { pubSubs } from './pubSub';
 export { triggers } from './triggers';

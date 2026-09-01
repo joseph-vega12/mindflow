@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { FeedActivity, FeedActivityWithId, TestResult, TestResultWithId, UserDetails } from 'types';
+import { type UpdateData } from 'firebase-admin/firestore';
 
 export const syncFeedAndTestResults = async () => {
   try {
@@ -51,7 +52,7 @@ export const syncFeedAndTestResults = async () => {
         }
       };
 
-      await firestore.collection('feed').doc(feedActivity.id).update(updatedFeedActivity);
+      await firestore.collection('feed').doc(feedActivity.id).update(updatedFeedActivity as UpdateData<FeedActivity>);
       feed.push({ ...updatedFeedActivity, id: feedActivity.id });
     }
 
@@ -73,7 +74,7 @@ export const syncFeedAndTestResults = async () => {
         }
       };
 
-      await firestore.collection('testResults').doc(testResult.id).update(updatedTestResult);
+      await firestore.collection('testResults').doc(testResult.id).update(updatedTestResult as UpdateData<TestResult>);
       results.push({ ...updatedTestResult, id: testResult.id });
     }
 

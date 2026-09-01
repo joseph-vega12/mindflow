@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { google } from 'googleapis';
 
-import * as functions from 'firebase-functions';
+import { gmailEmail, gmailClientId, gmailClientSecret, gmailRefreshToken } from '../../params';
 
 import { AvailableEmailTemplates } from '../../types/Email';
 
@@ -12,10 +12,10 @@ const { OAuth2 } = google.auth;
 const OAUTH_PLAYGROUND = 'https://developers.google.com/oauthplayground';
 
 export async function createEmailClient() {
-  const email = functions.config().gmail.email;
-  const clientId = functions.config().gmail.client_id;
-  const clientSecret = functions.config().gmail.client_secret;
-  const refreshToken = functions.config().gmail.refresh_token;
+  const email = gmailEmail.value();
+  const clientId = gmailClientId.value();
+  const clientSecret = gmailClientSecret.value();
+  const refreshToken = gmailRefreshToken.value();
 
   const myOAuth2Client = new OAuth2(clientId, clientSecret, OAUTH_PLAYGROUND);
 

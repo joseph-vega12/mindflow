@@ -1,12 +1,18 @@
 import * as functions from 'firebase-functions';
+import { onDocumentCreated } from 'firebase-functions/v2/firestore';
 
 import { UserDetails } from 'types';
 
 import { sendTemplateEmail } from '../utils/email';
 
-export const onUserCreated = functions.firestore.document('/users/{userId}').onCreate(async (snap, context) => {
+export const onUserCreated = onDocumentCreated('users/{userId}', async (event) => {
+  const snap = event.data;
+  if (!snap) {
+    functions.logger.warn('[onUserCreated] No data associated with the event');
+    return;
+  }
   const user = snap.data() as UserDetails;
-  const userId = context.params.userId;
+  const userId = event.params.userId;
 
   functions.logger.info('[onUserCreated] New user: ', {
     ...user,

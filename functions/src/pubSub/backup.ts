@@ -1,4 +1,5 @@
 import * as functions from 'firebase-functions';
+import { onSchedule } from 'firebase-functions/v2/scheduler';
 
 import * as firestore from '@google-cloud/firestore';
 const client = new firestore.v1.FirestoreAdminClient();
@@ -6,7 +7,7 @@ const client = new firestore.v1.FirestoreAdminClient();
 // Replace BUCKET_NAME
 const bucket = 'gs://mindflow-firestore-backup';
 
-export const scheduledFirestoreBackup = functions.pubsub.schedule('every 24 hours').onRun((context) => {
+export const scheduledFirestoreBackup = onSchedule('every 24 hours', (context) => {
   const projectId = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT || 'mindflow-1e15bs';
   const databaseName = client.databasePath(projectId, '(default)');
 

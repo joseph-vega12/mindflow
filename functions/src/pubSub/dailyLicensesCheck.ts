@@ -1,9 +1,11 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { onSchedule } from 'firebase-functions/v2/scheduler';
 
 import { ELicenseStatus, License, LicenseDocumentWithId } from 'types';
+import { WithFieldValue } from 'firebase-admin/firestore';
 
-export const dailyLicensesCheck = functions.pubsub.schedule('every day 00:00').onRun(async () => {
+export const dailyLicensesCheck = onSchedule('every day 00:00', async () => {
   try {
     const todayDate = +new Date();
 
@@ -17,7 +19,7 @@ export const dailyLicensesCheck = functions.pubsub.schedule('every day 00:00').o
           id: doc.id,
           ...(doc.data() as License)
         }),
-        toFirestore: (doc: License) => doc
+        toFirestore: (doc: WithFieldValue<License>) => doc
       })
       .get();
 

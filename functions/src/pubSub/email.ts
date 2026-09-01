@@ -1,4 +1,5 @@
 import * as functions from 'firebase-functions';
+import { onSchedule } from 'firebase-functions/v2/scheduler';
 
 import * as firestore from '@google-cloud/firestore';
 const client = new firestore.v1.FirestoreAdminClient();
@@ -8,7 +9,7 @@ const firestoreClient = new firestore.Firestore();
 const bucket = 'gs://mindflow-firestore-backup';
 
 // 6am est
-export const scheduledFirestoreBackup = functions.pubsub.schedule('every 24 hours').onRun((context) => {});
+export const scheduledFirestoreBackup = onSchedule('every 24 hours', (context) => { });
 // '5-one-week-inactive' -> Not seen in last 7 days // onInactive
 // '3-one-week-incomplete-onboarding' -> Not finished tutorial after 7 days // onTutorialIncomplete
 // '4-two-weeks-incomplete-onboarding' -> Not finished tutorial after 14 days // onTutorialIncomplete

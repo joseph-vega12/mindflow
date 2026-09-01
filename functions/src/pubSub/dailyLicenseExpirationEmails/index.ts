@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { onSchedule } from 'firebase-functions/v2/scheduler';
 import * as moment from 'moment';
 
 import { ELicenseStatus, License, LicenseDocumentWithId } from 'types';
@@ -7,8 +8,9 @@ import { ELicenseStatus, License, LicenseDocumentWithId } from 'types';
 import { AvailableEmailTemplates } from '../../types/Email';
 
 import { sendTemplateEmail } from '../../utils/email';
+import { WithFieldValue } from 'firebase-admin/firestore';
 
-export const dailyLicenseExpirationEmails = functions.pubsub.schedule('every day 10:00').onRun(async () => {
+export const dailyLicenseExpirationEmails = onSchedule('every day 10:00', async () => {
   try {
     const todayDate = moment().format('MM/DD/YYYY');
 
@@ -21,7 +23,7 @@ export const dailyLicenseExpirationEmails = functions.pubsub.schedule('every day
           id: doc.id,
           ...(doc.data() as License)
         }),
-        toFirestore: (doc: License) => doc
+        toFirestore: (doc: WithFieldValue<License>) => doc
       })
       .get();
 

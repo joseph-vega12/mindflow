@@ -8,6 +8,11 @@ import * as functions from 'firebase-functions';
 
 import { getAccessToken, retrieveOrder } from '../utils/paypal';
 import { sendTemplateEmail } from '../utils/email';
+import {
+  groupIsoSecurityKey,
+  groupIsoSuccessfulResponseStatus,
+  stripeSecretKey
+} from '../params';
 
 import * as cors from 'cors';
 
@@ -109,7 +114,7 @@ const validateGroupIsoOrder = async (orderId: string) => {
   const resp = await axios.post(
     'https://secure.groupisogateway.com/api/query.php',
     qs.stringify({
-      security_key: functions.config().group_iso.security_key,
+      security_key: groupIsoSecurityKey.value(),
       transaction_id: Number(orderId)
     }),
     {
@@ -128,7 +133,7 @@ const validateGroupIsoOrder = async (orderId: string) => {
 
   const status = get(transaction, ['action', 'response_text', '_text']);
 
-  if (status !== functions.config().group_iso.successful_response_status) {
+  if (status !== groupIsoSuccessfulResponseStatus.value()) {
     throw new Error('Payment not found!');
   }
 
@@ -144,7 +149,7 @@ const validateGroupIsoOrder = async (orderId: string) => {
 };
 
 const validateStripeOrder = async (orderId: string) :Promise<any> => {
-  const stripe = require("stripe")(functions.config().stripe.secret_key);
+  const stripe = require("stripe")(stripeSecretKey.value());
 
   const session = await stripe.checkout.sessions.retrieve(orderId);
   const lineItems = await stripe.checkout.sessions.listLineItems(orderId);

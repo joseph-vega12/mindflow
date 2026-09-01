@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { onDocumentCreated } from 'firebase-functions/v2/firestore';
 
 import { get, set } from 'lodash';
 
@@ -15,11 +16,14 @@ const activityTypeCounterKeysDictionary = {
 
 // This function handles the counters(both user and business) and any kind of special treatment that we need to have in some special cases
 
-export const onFeedActivityCreated = functions.firestore
-  .document('/feed/{feedActivityId}')
-  .onCreate(async (snap, context) => {
-    const feedActivity = snap.data();
-    const feedActivityId = context.params.feedActivityId;
+export const onFeedActivityCreated = onDocumentCreated('feed/{feedActivityId}', async (event) => {
+  const snap = event.data;
+  if (!snap) {
+    functions.logger.warn('[onFeedActivityCreated] No data associated with the event');
+    return;
+  }
+  const feedActivity = snap.data();
+  const feedActivityId = event.params.feedActivityId;
 
     functions.logger.info('New feed activity: ', {
       ...feedActivity,

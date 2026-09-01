@@ -9,6 +9,11 @@ import { Request, Response } from 'express';
 
 import * as emailValidator from 'email-validator';
 import { getAccessToken, retrieveOrder } from '../utils/paypal';
+import {
+  groupIsoSecurityKey,
+  groupIsoSuccessfulResponseStatus,
+  stripeSecretKey
+} from '../params';
 
 import { License } from 'types';
 import { ELicenseStatus, ELicenseType } from '../types';
@@ -266,7 +271,7 @@ const validateGroupIsoOrder = async (orderId: string) => {
   const resp = await axios.post(
     'https://secure.groupisogateway.com/api/query.php',
     qs.stringify({
-      security_key: functions.config().group_iso.security_key,
+      security_key: groupIsoSecurityKey.value(),
       transaction_id: Number(orderId)
     }),
     {
@@ -284,7 +289,7 @@ const validateGroupIsoOrder = async (orderId: string) => {
   }
 
   const status = get(transaction, ['action', 'response_text', '_text']);
-  if (status !== functions.config().group_iso.successful_response_status) {
+  if (status !== groupIsoSuccessfulResponseStatus.value()) {
     throw new Error('Payment not found!');
   }
 
@@ -293,7 +298,7 @@ const validateGroupIsoOrder = async (orderId: string) => {
 
 const validateStripeOrder = async (orderId: string) :Promise<any> => {
   
-  const stripe = require("stripe")(functions.config().stripe.secret_key);
+  const stripe = require("stripe")(stripeSecretKey.value());
 
   const session = await stripe.checkout.sessions.retrieve(orderId);
   

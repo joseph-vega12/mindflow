@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { get } from 'lodash';
 
 import { createAnaylyticDateSnapshot, incrementAnalyticsKey, setAverageReportAnalyticsKey } from './helpers';
@@ -22,7 +23,7 @@ const analyticsCounterKeyMap: Record<UserTestType, keyof AnalyticSnapshot['count
   practice: 'practices'
 };
 
-export const dailyAnalyticsSnapshot = functions.pubsub.schedule('1 0 * * *').onRun(async (context) => {
+export const dailyAnalyticsSnapshot = onSchedule('1 0 * * *', async () => {
   const startTimestamp = moment().subtract(1, 'day').startOf('day').unix() * 1000;
   const endTimestamp = moment().subtract(1, 'day').endOf('day').unix() * 1000;
 

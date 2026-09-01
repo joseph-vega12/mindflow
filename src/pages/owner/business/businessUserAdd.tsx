@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
 
-import { useFirebaseContext } from 'lib/firebase';
-
 import {
   chakra,
   Button as ChakraButton,
@@ -16,45 +14,14 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
-import {
-  DifficultLevel,
-  difficultTestTypeRelation,
-  ELicenseStatus,
-  ELicenseType,
-  TestType,
-  UserDetails,
-  WhereDidYouHearAboutUs,
-  whereDidYouHearAboutUsOptions
-} from 'types';
+import { DifficultLevel, difficultTestTypeRelation, TestType } from 'types';
 
-import {
-  currentLevelsOptions,
-  userTypeOptions,
-  currentLevelTestTypes,
-  SelectedUserFields,
-  SubmitValues,
-  userSubmitSchema
-} from './index';
+import { userTypeOptions, SelectedUserFields, SubmitValues, userSubmitSchema } from './index';
 
-import { Icon } from 'components/common';
 import { toast } from 'react-toastify';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import { withMask } from 'use-mask-input';
-
-
-const WHERE_DID_YOU_HEAR_ABOUT_US_DESCRIPTIVE_OPTIONS: WhereDidYouHearAboutUs[] = [
-  'consultant',
-  'former',
-  'test_prep_company',
-  'dominate_prep',
-  'tutor',
-  'online_course',
-  'school',
-  'teacher',
-  'club',
-  'other'
-];
 
 interface SubmittedValues {
   user: SelectedUserFields;
@@ -78,17 +45,8 @@ export const AddBusinessUserForm: FC<any> = ({ isLoading, onSubmit, businessData
     SelectedUserFields & {
       password: string;
     }
-  >({
-    defaultValues: {
-      whereDidYouHearAboutUs: 'other',
-      currentLevel: 'college',
-      testType: 'gmat'
-    }
-  });
-  const { firestore } = useFirebaseContext();
+  >();
   const formValues = watch();
-
-  const testTypes = currentLevelTestTypes[formValues.currentLevel as DifficultLevel] ?? [];
 
   const getValidatedTestType = (level: DifficultLevel, testType: TestType | 'no_test'): TestType => {
     if (['esl', 'toefl'].includes(testType)) return 'sat';

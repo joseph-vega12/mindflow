@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { onDocumentWritten } from 'firebase-functions/v2/firestore';
 
 import onWriteHelper, { FirestoreWriteEventType } from '../utils/firestore/onWriteHelper';
 
@@ -9,8 +10,13 @@ import { LicenseDocumentWithId, UserDetails } from 'types';
 
 const firestore = admin.firestore();
 
-export const onLicenseWrite = functions.firestore.document('/licenses/{id}').onWrite(async (change, context) => {
-  const licenseId = context.params.id;
+export const onLicenseWrite = onDocumentWritten('licenses/{id}', async (event) => {
+  const change = event.data;
+  if (!change) {
+    functions.logger.warn('[onLicenseWrite] No data associated with the event');
+    return;
+  }
+  const licenseId = event.params.id;
 
   const operation = onWriteHelper(change);
 
@@ -24,11 +30,7 @@ export const onLicenseWrite = functions.firestore.document('/licenses/{id}').onW
   });
 
   if (!newLicense || operation === FirestoreWriteEventType.Delete) {
-    functions.logger.info('License deleted!', {
-      licenseId,
-      authType: context.authType,
-      auth: context.auth
-    });
+    functions.logger.info('License deleted!', { licenseId });
 
     return;
   }
@@ -51,5 +53,5 @@ export const onLicenseWrite = functions.firestore.document('/licenses/{id}').onW
       license: _.pick(newLicense, ['activationDate', 'expirationDate', 'id', 'orderId', 'purchaseDate', 'status', 'type'])
     };
     await firestore.collection('users').doc(userId).set(updatedUser, { merge: true });
-  } catch (error) {}
+  } catch (error) { }
 });

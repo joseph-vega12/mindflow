@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-
 import { get, findIndex } from 'lodash';
+import { coreMainBusinessId } from '../params';
 import { Business, LicenseDocumentWithId, UserDetails, UserDetailsWithId } from 'types';
 
 export const syncBetaUsers = async () => {
@@ -16,7 +16,7 @@ export const syncBetaUsers = async () => {
       } as UserDetailsWithId;
     });
 
-    const businessSnap = await firestore.collection('business').doc(functions.config().core.main_business_id).get();
+    const businessSnap = await firestore.collection('business').doc(coreMainBusinessId.value()).get();
     const business = businessSnap.data() as Business;
 
     const licensesSnap = await admin.firestore().collection('licenses').where('orderId', '==', 'beta_testing').get();
@@ -60,14 +60,14 @@ export const syncBetaUsers = async () => {
       // if (user.license) continue;
 
       const resumedBusiness = {
-        id: functions.config().core.main_business_id,
+        id: coreMainBusinessId.value(),
         name: get(business, 'name', null),
         email: get(business, 'email', null),
         timestamp: get(business, 'timestamp')
       };
 
       const userUpdateValues: Partial<UserDetails> = {
-        businessId: functions.config().core.main_business_id,
+        businessId: coreMainBusinessId.value(),
         license: {
           id: license.id,
           status: get(license, 'status'),
@@ -83,7 +83,7 @@ export const syncBetaUsers = async () => {
       };
 
       const licenseUpdateValue = {
-        businessId: functions.config().core.main_business_id,
+        businessId: coreMainBusinessId.value(),
         business: resumedBusiness
       };
 

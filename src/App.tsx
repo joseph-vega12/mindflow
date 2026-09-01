@@ -20,6 +20,7 @@ import { BetaSignUp } from 'pages/beta';
 import { BusinessPurchaseAdditionalLicenses } from 'pages/businessPurchaseAdditionalLicenses';
 import { LoginPage } from 'pages/login';
 import { WaitingRoom } from 'pages/waitingRoom';
+import { CustomTokenAuth } from 'pages/customTokenAuth';
 import { PagesRouter } from 'pages/router';
 import { ResetPassword } from 'pages/resetPassword';
 
@@ -69,6 +70,7 @@ function App() {
 
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/oauth/waiting-room" element={<WaitingRoom />} />
+                    <Route path="/auth/custom-token" element={<CustomTokenAuth />} />
                     <Route path="/pencilSpacesLogin" element={<PencilLoginPage />} />
                     <Route path="/*" element={<PagesRouter />} />
                     {/* <PagesRouter /> */}

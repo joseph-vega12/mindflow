@@ -2,6 +2,8 @@
 import { Request, Response } from 'express';
 import * as functions from 'firebase-functions';
 
+import { stripeSecretKey } from '../params';
+
 const methodName = 'createCheckoutSession';
 
 export const createCheckoutSession = async (request: Request, response: Response) => {
@@ -17,7 +19,7 @@ export const createCheckoutSession = async (request: Request, response: Response
       quantity
     });
 
-    const stripe = require("stripe")(functions.config().stripe.secret_key);
+    const stripe = require("stripe")(stripeSecretKey.value());
 
     const amountCent = amount * 100;
     const session = await stripe.checkout.sessions.create({

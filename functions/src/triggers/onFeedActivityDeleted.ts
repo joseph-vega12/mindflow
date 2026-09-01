@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { onDocumentDeleted } from 'firebase-functions/v2/firestore';
 
 import { get, set } from 'lodash';
 
@@ -15,9 +16,14 @@ const activityTypeCounterKeysDictionary = {
 
 // This function handles the counters(both user and business) and any kind of special treatment that we need to have in some special cases
 
-export const onFeedActivityDeleted = functions.firestore.document('/feed/{feedActivityId}').onDelete(async (snap, context) => {
+export const onFeedActivityDeleted = onDocumentDeleted('feed/{feedActivityId}', async (event) => {
+  const snap = event.data;
+  if (!snap) {
+    functions.logger.warn('[onFeedActivityDeleted] No data associated with the event');
+    return;
+  }
   const feedActivity = snap.data();
-  const feedActivityId = context.params.feedActivityId;
+  const feedActivityId = event.params.feedActivityId;
 
   functions.logger.info('Removing feed activity counters: ', {
     ...feedActivity,

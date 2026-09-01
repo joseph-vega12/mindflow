@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { onDocumentCreated } from 'firebase-functions/v2/firestore';
 
 import { get, set } from 'lodash';
 import { FeedActivity, UserActivityStatsReportItem } from 'types';
@@ -13,9 +14,14 @@ const getNewAverage = (oldAverage: number, oldReports: number, newEntry: number)
   return oldAverage + averageDiff;
 };
 
-export const onTestResultCreated = functions.firestore.document('/testResults/{testResultId}').onCreate(async (snap, context) => {
+export const onTestResultCreated = onDocumentCreated('testResults/{testResultId}', async (event) => {
+  const snap = event.data;
+  if (!snap) {
+    functions.logger.warn('[onTestResultCreated] No data associated with the event');
+    return;
+  }
   const testResult = snap.data();
-  const testResultId = context.params.testResultId;
+  const testResultId = event.params.testResultId;
 
   functions.logger.info('New testResult: ', {
     ...testResult,

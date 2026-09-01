@@ -1,14 +1,20 @@
 import * as functions from 'firebase-functions';
+import { onDocumentCreated } from 'firebase-functions/v2/firestore';
 
 import { BusinessApproval } from 'types';
 
 import { sendTemplateEmail } from '../utils/email';
 
-const cors = require('cors')({origin: true});
+const cors = require('cors')({ origin: true });
 
-export const onBusinessApprovalCreated = functions.firestore.document('/businessApprovals/{businessApprovalId}').onCreate(async (snap, context) => {
-  const businessApproval = snap.data() as BusinessApproval;
-  const businessApprovalId = context.params.businessApprovalResultId;
+export const onBusinessApprovalCreated = onDocumentCreated('businessApprovals/{businessApprovalId}', async (event) => {
+  const snapshot = event.data;
+  if (!snapshot) {
+    functions.logger.warn('[onBusinessApprovalCreated] No data associated with the event');
+    return;
+  }
+  const businessApproval = snapshot.data() as BusinessApproval;
+  const businessApprovalId = event.params.businessApprovalId;
 
   functions.logger.info('[onBusinessApprovalCreated] New business approval: ', {
     ...businessApproval,

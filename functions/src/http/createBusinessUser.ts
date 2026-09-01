@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import { get } from 'lodash';
 
 import * as emailValidator from 'email-validator';
-import { BusinessDocumentWithId, License, UserWithDetails } from 'types';
+import { BusinessDocumentWithId, License, UserDetailsWithId } from 'types';
 import { ELicenseStatus, ELicenseType } from '../types';
 
 export const createBusinessUser = async (request: Request, response: Response) => {
@@ -91,7 +91,7 @@ export const createBusinessUser = async (request: Request, response: Response) =
     const newLicense = await admin.firestore().collection('licenses').add(licenseValue);
     functions.logger.log('License created', { newLicense });
 
-    const userValue: UserWithDetails = {
+    const userValue: UserDetailsWithId = {
       ...user,
 
       businessId: user.businessId,

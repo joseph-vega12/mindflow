@@ -5,7 +5,8 @@ import { Request, Response } from 'express';
 import { get } from 'lodash';
 
 import * as emailValidator from 'email-validator';
-import { BusinessDocumentWithId, License, UserWithDetails } from 'types';
+import { coreMainBusinessId } from '../params';
+import { BusinessDocumentWithId, License } from 'types';
 import { ELicenseStatus, ELicenseType } from '../types';
 
 export const createBetaUser = async (request: Request, response: Response) => {
@@ -58,7 +59,7 @@ export const createBetaUser = async (request: Request, response: Response) => {
       displayName: `${user.firstName} ${user.lastName}`
     });
 
-    const businessSnap = await admin.firestore().collection('business').doc(functions.config().core.main_business_id).get();
+    const businessSnap = await admin.firestore().collection('business').doc(coreMainBusinessId.value()).get();
     const business = { id: businessSnap.id, ...businessSnap.data() } as BusinessDocumentWithId;
 
     const licenseValue: License = {
@@ -78,7 +79,7 @@ export const createBetaUser = async (request: Request, response: Response) => {
       },
 
       business: {
-        id: functions.config().core.main_business_id,
+        id: coreMainBusinessId.value(),
         name: get(business, 'name'),
         email: get(business, 'email'),
         timestamp: get(business, 'timestamp')
@@ -95,10 +96,11 @@ export const createBetaUser = async (request: Request, response: Response) => {
     const newLicense = await admin.firestore().collection('licenses').add(licenseValue);
     functions.logger.log('License created', { newLicense });
 
+    // @ts-ignore
     const userValue: UserWithDetails = {
       ...user,
 
-      businessId: functions.config().core.main_business_id,
+      businessId: coreMainBusinessId.value(),
       business: get(licenseValue, 'business'),
 
       license: {

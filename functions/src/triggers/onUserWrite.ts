@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { onDocumentWritten } from 'firebase-functions/v2/firestore';
 import { get } from 'lodash';
 
 import onWriteHelper, { FirestoreWriteEventType } from '../utils/firestore/onWriteHelper';
@@ -8,9 +9,14 @@ import { sendTemplateEmail } from '../utils/email';
 
 const firestore = admin.firestore();
 
-export const onUserWrite = functions.firestore.document('/users/{userId}').onWrite(async (change, context) => {
+export const onUserWrite = onDocumentWritten('users/{userId}', async (event) => {
   try {
-    const userId = context.params.userId;
+    const change = event.data;
+    if (!change) {
+      functions.logger.warn('[onUserWrite] No data associated with the event');
+      return;
+    }
+    const userId = event.params.userId;
 
     const operation = onWriteHelper(change);
 

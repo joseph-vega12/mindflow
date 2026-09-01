@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { onDocumentWritten } from 'firebase-functions/v2/firestore';
 import { findIndex, get, set } from 'lodash';
 
 import onWriteHelper, { FirestoreWriteEventType } from '../utils/firestore/onWriteHelper';
@@ -7,11 +8,18 @@ import { getPercentage } from '../utils/utils';
 import { sendTemplateEmail } from '../utils/email';
 
 import { DiagnosticFeedActivity, UserDetails } from 'types';
+import type { UpdateData } from 'firebase-admin/firestore';
 
 const firestore = admin.firestore();
 
-export const onDiagnosticResultCreated = functions.firestore.document('/diagnosticResults/{id}').onWrite(async (change, context) => {
-  const diagnosticResultId = context.params.id;
+export const onDiagnosticResultCreated = onDocumentWritten('diagnosticResults/{id}', async (event) => {
+  const change = event.data;
+  if (!change) {
+    functions.logger.warn('[onDiagnosticResultCreated] No data associated with the event');
+    return;
+  }
+
+  const diagnosticResultId = event.params.id;
 
   const operation = onWriteHelper(change);
 
@@ -27,9 +35,7 @@ export const onDiagnosticResultCreated = functions.firestore.document('/diagnost
   if (!newDiagnosticResult || operation === FirestoreWriteEventType.Delete) {
     functions.logger.info('Diagnostic result deleted!', {
       oldDiagnosticResult,
-      diagnosticResultId,
-      authType: context.authType,
-      auth: context.auth
+      diagnosticResultId
     });
 
     return;
@@ -174,7 +180,7 @@ export const onDiagnosticResultCreated = functions.firestore.document('/diagnost
 
     set(user, ['activity', 'stats', 'diagnostics', newDiagnosticResult.category], resumedDiagnostics);
 
-    await firestore.collection('users').doc(userSnap.id).update(user);
+    await firestore.collection('users').doc(userSnap.id).update(user as UpdateData<UserDetails>);
     functions.logger.info('Updated user ', user);
 
     return;

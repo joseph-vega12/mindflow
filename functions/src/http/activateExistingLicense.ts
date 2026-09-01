@@ -9,9 +9,16 @@ import { Request, Response } from 'express';
 
 import * as emailValidator from 'email-validator';
 import { getAccessToken, retrieveOrder } from '../utils/paypal';
+import {
+  paypalClientId,
+  paypalClientSecret,
+  groupIsoSecurityKey,
+  groupIsoSuccessfulResponseStatus
+} from '../params';
 
 import { License, LicenseDocumentWithId } from 'types';
 import { ELicenseStatus } from '../types';
+import type { UpdateData } from 'firebase-admin/firestore';
 
 const methodName = 'activateExistingLicense';
 export const activateExistingLicense = async (request: Request, response: Response) => {
@@ -66,7 +73,7 @@ export const activateExistingLicense = async (request: Request, response: Respon
     });
     functions.logger.warn(`[${methodName}] New Auth user: `, { id: newUser.uid, email: user.email, t: Object.values(ELicenseStatus ?? {}) });
 
-    const updateLicensePayload: License = {
+    const updateLicensePayload: UpdateData<License> = {
       ...foundLicense,
       status: ELicenseStatus.ACTIVE,
 
@@ -180,7 +187,7 @@ const validateUserPayload = (user: Record<string, any>) => {
 };
 
 const validatePaypalOrder = async (orderId: string) => {
-  const paypalAccessToken = await getAccessToken(functions.config().paypal.client_id, functions.config().paypal.client_secret);
+  const paypalAccessToken = await getAccessToken(paypalClientId.value(), paypalClientSecret.value());
   // const paypalOrder = await retrieveOrder(paypalAccessToken.access_token, orderId);
   const paypalOrder = await retrieveOrder(orderId);
   if (!paypalOrder) {
@@ -198,7 +205,7 @@ const validateGroupIsoOrder = async (orderId: string) => {
   const resp = await axios.post(
     'https://secure.groupisogateway.com/api/query.php',
     qs.stringify({
-      security_key: functions.config().group_iso.security_key,
+      security_key: groupIsoSecurityKey.value(),
       transaction_id: Number(orderId)
     }),
     {
@@ -216,7 +223,7 @@ const validateGroupIsoOrder = async (orderId: string) => {
   }
 
   const status = get(transaction, ['action', 'response_text', '_text']);
-  if (status !== functions.config().group_iso.successful_response_status) {
+  if (status !== groupIsoSuccessfulResponseStatus.value()) {
     throw new Error('Payment not found!');
   }
 
