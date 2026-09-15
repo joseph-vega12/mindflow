@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Flex, Progress, Text } from '@chakra-ui/react';
-import { signInWithCustomToken } from 'firebase/auth';
+import { onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
 
 import { Icon } from 'components/common';
 import { auth } from 'lib/firebase/firebaseInit';
@@ -19,41 +19,70 @@ export const WaitingRoom: FC = () => {
     const hasExchangedRef = useRef(false);
 
     useEffect(() => {
-        if (!code || hasExchangedRef.current) return;
-        hasExchangedRef.current = true;
+        if (!code) return;
 
-        // DEVELOPMENT
-        // const redirectUri = 'http://localhost:3000/oauth/waiting-room';
-        const redirectUri = 'https://app.mindflowspeedreading.com/oauth/waiting-room';
+        let cancelled = false;
 
-        axios
-            .post(`${API_BASE}/oauthCleverAuth`, {
-                code,
-                redirect_uri: redirectUri
-            })
-            .then(async (res) => {
-                const data = res?.data ?? {};
-                console.log(data, 'data');
-                const customToken = data.customToken;
-                const hasAvailableSeat = data.hasAvailableSeat;
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            // Auth persistence is ready — if already signed in, skip Clever exchange.
+            if (cancelled) return;
 
-                if (customToken && typeof customToken === 'string') {
-                    await signInWithCustomToken(auth, customToken);
-                    navigate('/', { replace: true });
-                    return;
-                }
+            if (user) {
+                navigate('/', { replace: true });
+                return;
+            }
 
-                if (hasAvailableSeat === false) {
-                    setError('No available seats for your district. Please contact your school.');
-                } else {
-                    setError('Sign-in could not be completed. Please try again.');
-                }
-            })
-            .catch((err) => {
-                console.error('OAuth token exchange failed', err);
-                setError('Sign-in failed. Please try again.');
-            });
-    }, [code, location.pathname, navigate]);
+            if (hasExchangedRef.current) return;
+            hasExchangedRef.current = true;
+
+            // DEVELOPMENT
+            // const redirectUri = 'http://localhost:3000/oauth/waiting-room';
+            const redirectUri = 'https://app.mindflowspeedreading.com/oauth/waiting-room';
+
+            axios
+                .post(`${API_BASE}/oauthCleverAuth`, {
+                    code,
+                    redirect_uri: redirectUri
+                })
+                .then(async (res) => {
+                    if (cancelled) return;
+
+                    const data = res?.data ?? {};
+                    console.log(data, 'data');
+                    const customToken = data.customToken;
+                    const hasAvailableSeat = data.hasAvailableSeat;
+
+                    if (customToken && typeof customToken === 'string') {
+                        await signInWithCustomToken(auth, customToken);
+                        if (!cancelled) navigate('/', { replace: true });
+                        return;
+                    }
+
+                    if (hasAvailableSeat === false) {
+                        setError('No available seats for your district. Please contact your school.');
+                    } else {
+                        setError('Sign-in could not be completed. Please try again.');
+                    }
+                })
+                .catch((err) => {
+                    if (cancelled) return;
+
+                    // Twin request may have already signed us in — don't show a false failure.
+                    if (auth.currentUser) {
+                        navigate('/', { replace: true });
+                        return;
+                    }
+
+                    console.error('OAuth token exchange failed', err);
+                    setError('Sign-in failed. Please try again.');
+                });
+        });
+
+        return () => {
+            cancelled = true;
+            unsubscribe();
+        };
+    }, [code, navigate]);
 
     return (
         <Flex
