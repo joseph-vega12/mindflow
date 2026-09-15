@@ -261,9 +261,40 @@ export const oauthCleverAuth = async (request: Request, response: Response) => {
     const customToken = await getAuth().createCustomToken(newUser.uid);
     return response.status(200).json({ customToken }).end();
   } catch (err) {
-    const errAny = err as { response?: { status?: number; data?: unknown } };
+    const errAny = err as {
+      response?: { status?: number; data?: unknown };
+      message?: string;
+      code?: string;
+    };
     const status = errAny.response?.status ?? 500;
     const responseData = errAny.response?.data;
+    const redirectUri = (request.body as { redirect_uri?: string })?.redirect_uri;
+
+    const cleverError =
+      responseData && typeof responseData === 'object'
+        ? (responseData as { error?: string; error_description?: string })
+        : undefined;
+
+    const logPayload = {
+      status,
+      cleverError: cleverError?.error,
+      cleverErrorDescription: cleverError?.error_description,
+      responseData,
+      axiosMessage: errAny.message,
+      axiosCode: errAny.code,
+      redirectUri
+    };
+
+    // 401 from Clever usually means bad client credentials (system misconfig).
+    // Other 4xx (e.g. invalid_grant / expired code) are expected user/retry errors.
+    const isCredentialFailure = status === 401;
+    const isExpectedClientOAuthError = status >= 400 && status < 500 && !isCredentialFailure;
+
+    if (isExpectedClientOAuthError) {
+      functions.logger.warn('[oauthCleverAuth] Clever OAuth client/retry error', logPayload);
+    } else {
+      functions.logger.error('[oauthCleverAuth] Clever OAuth failure', logPayload);
+    }
 
     const message =
       responseData != null ? responseData : { message: 'Token exchange failed' };
