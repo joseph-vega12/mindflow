@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 
-import { get, merge } from 'lodash';
+import { get } from 'lodash';
 import { SimpleGrid } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from 'react-query';
@@ -13,7 +13,7 @@ import { BasePage } from 'components/layout/Pages';
 
 import { TutorialInstructions, TutorialTimeline } from './index';
 import { useAuthContext } from 'lib/firebase';
-import { collection, doc, getDocs, limit, query, setDoc, where } from 'firebase/firestore';
+import { collection, doc, getDocs, limit, query, updateDoc, where } from 'firebase/firestore';
 import { db } from 'lib/firebase/firebaseInit';
 
 interface Props { }
@@ -40,25 +40,18 @@ export const TutorialContainer: FC<Props> = ({ }) => {
   const testType = user?.userDetails?.testType ?? '';
 
   const updateTutorialKeyMutation = useMutation(async (update: keyof UserTutorial | Partial<UserTutorial>) => {
-    try {
-      const patch = typeof update === 'string' ? { [update]: true } : update;
-      const newTutorial = merge({}, tutorial, patch);
-
-      await setDoc(
-        doc(db, 'users', user?.uid),
-        {
-          activity: {
-            tutorial: newTutorial
-          }
-        },
-        { merge: true }
-      );
-
-      await refetchUserDetails();
-    } catch (e) {
-      console.log(e);
-      throw e;
+    if (!user?.uid) {
+      throw new Error('User is required to update tutorial progress');
     }
+
+    const patch = typeof update === 'string' ? { [update]: true } : update;
+    const tutorialPatch = Object.entries(patch).reduce((acc, [key, value]) => {
+      acc[`activity.tutorial.${key}`] = value;
+      return acc;
+    }, {} as Record<string, boolean>);
+
+    await updateDoc(doc(db, 'users', user.uid), tutorialPatch);
+    await refetchUserDetails();
   });
 
   const pretestEssayQuery = useQuery(
@@ -148,11 +141,11 @@ export const TutorialContainer: FC<Props> = ({ }) => {
     },
     {
       enabled: !!pretestEssayQuery.data,
+      refetchOnMount: 'always',
       refetchOnWindowFocus: true,
       onSuccess(result) {
         if (result && !tutorial.speedReadingTest) {
           updateTutorialKeyMutation.mutate('speedReadingTest');
-          refetchUserDetails();
         }
       }
     }
@@ -173,13 +166,12 @@ export const TutorialContainer: FC<Props> = ({ }) => {
     },
     {
       enabled: !!diagnosticQuery.data,
+      refetchOnMount: 'always',
       refetchOnWindowFocus: true,
       onSuccess(result) {
         if (result && !tutorial.diagnosticTest) {
           updateTutorialKeyMutation.mutate('diagnosticTest');
-          refetchUserDetails();
         }
-        // updateTutorialKeyMutation.mutate('finished');
       }
     }
   );
@@ -207,9 +199,11 @@ export const TutorialContainer: FC<Props> = ({ }) => {
   const onVideoFinish = (videoType: TutorialVideoType) => {
     if (videoType === 'welcome' && !tutorial.welcomeVideo) {
       updateTutorialKeyMutation.mutate('welcomeVideo');
+      return;
     }
-    if (videoType === 'tutorial' && tutorial.speedReadingTest && !tutorial.tutorialVideo) {
-      updateTutorialKeyMutation.mutate({ tutorialVideo: true, finished: true });
+
+    if (videoType === 'tutorial' && !tutorial.tutorialVideo) {
+      updateTutorialKeyMutation.mutate({ tutorialVideo: true });
     }
   };
 
