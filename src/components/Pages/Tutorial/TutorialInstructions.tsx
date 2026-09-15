@@ -5,15 +5,14 @@ import { Box, Divider, Flex, Text } from '@chakra-ui/react';
 import { Icon } from 'components/common';
 import { VideoPlayer } from 'components/common';
 
-import { TutorialVideoType } from './TutorialContainer';
-
 import { useAuthContext } from 'lib/firebase';
 
 interface Props {
-  onVideoFinish: (videoType: TutorialVideoType) => void;
+  onWelcomeVideoFinish: () => void;
+  onTutorialVideoFinish: () => void;
 }
 
-export const TutorialInstructions: FC<Props> = ({ onVideoFinish }) => {
+export const TutorialInstructions: FC<Props> = ({ onWelcomeVideoFinish, onTutorialVideoFinish }) => {
   const { user } = useAuthContext();
 
   return (
@@ -32,7 +31,7 @@ export const TutorialInstructions: FC<Props> = ({ onVideoFinish }) => {
         <VideoPlayer
           id="welcome"
           videoUrl="https://cdn.jwplayer.com/videos/0kIYNF2I.mp4"
-          onFinish={() => onVideoFinish('welcome')}
+          onFinish={onWelcomeVideoFinish}
         />
         <Text fontSize="xl" bg="white" py={7} borderWidth={1} borderStyle="solid">
           Welcome to MindFlow & Onboarding
@@ -54,7 +53,7 @@ export const TutorialInstructions: FC<Props> = ({ onVideoFinish }) => {
         <VideoPlayer
           id="tutorial"
           videoUrl="https://cdn.jwplayer.com/videos/3nQyI6Nj.mp4"
-          onFinish={() => onVideoFinish('tutorial')}
+          onFinish={onTutorialVideoFinish}
         />
         <Text fontSize="xl" bg="white" py={7} borderWidth={1} borderStyle="solid">
           How does MindFlow work?

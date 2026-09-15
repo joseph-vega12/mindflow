@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { get } from 'lodash';
 import { SimpleGrid } from '@chakra-ui/react';
@@ -62,6 +62,9 @@ export const TutorialContainer: FC<Props> = ({}) => {
     }),
     [remoteTutorial, optimisticTutorial]
   );
+
+  const tutorialRef = useRef(tutorial);
+  tutorialRef.current = tutorial;
 
   const userDifficultLevel = user?.userDetails?.difficultLevel;
   const testType = user?.userDetails?.testType ?? '';
@@ -230,16 +233,21 @@ export const TutorialContainer: FC<Props> = ({}) => {
     toast.info(`You can proceed and play the ${videoType} video!`);
   };
 
-  const onVideoFinish = (videoType: TutorialVideoType) => {
-    if (videoType === 'welcome' && !tutorial.welcomeVideo) {
+  const onVideoFinish = useCallback((videoType: TutorialVideoType) => {
+    const currentTutorial = tutorialRef.current;
+
+    if (videoType === 'welcome' && !currentTutorial.welcomeVideo) {
       updateTutorialKeyMutation.mutate('welcomeVideo');
       return;
     }
 
-    if (videoType === 'tutorial' && !tutorial.tutorialVideo) {
+    if (videoType === 'tutorial' && !currentTutorial.tutorialVideo) {
       updateTutorialKeyMutation.mutate({ tutorialVideo: true });
     }
-  };
+  }, [updateTutorialKeyMutation]);
+
+  const onWelcomeVideoFinish = useCallback(() => onVideoFinish('welcome'), [onVideoFinish]);
+  const onTutorialVideoFinish = useCallback(() => onVideoFinish('tutorial'), [onVideoFinish]);
 
   const handleCompleteOnboarding = async () => {
     try {
@@ -259,7 +267,10 @@ export const TutorialContainer: FC<Props> = ({}) => {
   return (
     <BasePage boxShadow="none" spacing="md">
       <SimpleGrid columns={2} spacing={10}>
-        <TutorialInstructions onVideoFinish={onVideoFinish} />
+        <TutorialInstructions
+          onWelcomeVideoFinish={onWelcomeVideoFinish}
+          onTutorialVideoFinish={onTutorialVideoFinish}
+        />
         <TutorialTimeline
           isLoading={isLoading}
           handleStartVideo={handleStartVideo}
