@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">mindflow</string>
+    <string name="title_activity_main">mindflow</string>
+    <string name="package_name">com.mindflowspeedreading.app</string>
+    <string name="custom_url_scheme">com.mindflowspeedreading.app</string>
+</resources>
