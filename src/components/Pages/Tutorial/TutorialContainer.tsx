@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 
 import { get } from 'lodash';
 import { SimpleGrid } from '@chakra-ui/react';
@@ -16,24 +16,51 @@ import { useAuthContext } from 'lib/firebase';
 import { collection, doc, getDocs, limit, query, updateDoc, where } from 'firebase/firestore';
 import { db } from 'lib/firebase/firebaseInit';
 
-interface Props { }
+interface Props {}
 
 export type TutorialVideoType = 'welcome' | 'tutorial';
-export const TutorialContainer: FC<Props> = ({ }) => {
+
+const EMPTY_TUTORIAL: UserTutorial = {
+  welcomeVideo: false,
+  speedReadingTest: false,
+  diagnosticTest: false,
+  tutorialVideo: false,
+  finished: false
+};
+
+export const TutorialContainer: FC<Props> = ({}) => {
   const { isLoading: isLoadingUser, refetchUserDetails, user } = useAuthContext();
 
   const navigate = useNavigate();
 
-  const tutorial = useMemo(
-    () =>
-      get(user, ['userDetails', 'activity', 'tutorial'], {
-        welcomeVideo: false,
-        speedReadingTest: false,
-        diagnosticTest: false,
-        tutorialVideo: false,
-        finished: false
-      }),
+  const remoteTutorial = useMemo(
+    () => get(user, ['userDetails', 'activity', 'tutorial'], EMPTY_TUTORIAL) as UserTutorial,
     [user]
+  );
+
+  // Optimistic overlay so timeline unlocks immediately after video/test completion,
+  // without waiting on a slow/stale user refetch.
+  const [optimisticTutorial, setOptimisticTutorial] = useState<Partial<UserTutorial>>({});
+
+  useEffect(() => {
+    setOptimisticTutorial((prev) => {
+      const next = { ...prev };
+      (Object.keys(EMPTY_TUTORIAL) as (keyof UserTutorial)[]).forEach((key) => {
+        if (remoteTutorial[key]) {
+          delete next[key];
+        }
+      });
+      return next;
+    });
+  }, [remoteTutorial]);
+
+  const tutorial = useMemo(
+    () => ({
+      ...EMPTY_TUTORIAL,
+      ...remoteTutorial,
+      ...optimisticTutorial
+    }),
+    [remoteTutorial, optimisticTutorial]
   );
 
   const userDifficultLevel = user?.userDetails?.difficultLevel;
@@ -45,19 +72,27 @@ export const TutorialContainer: FC<Props> = ({ }) => {
     }
 
     const patch = typeof update === 'string' ? { [update]: true } : update;
+
+    setOptimisticTutorial((prev) => ({ ...prev, ...patch }));
+
     const tutorialPatch = Object.entries(patch).reduce((acc, [key, value]) => {
-      acc[`activity.tutorial.${key}`] = value;
+      acc[`activity.tutorial.${key}`] = value as boolean;
       return acc;
     }, {} as Record<string, boolean>);
 
     await updateDoc(doc(db, 'users', user.uid), tutorialPatch);
-    await refetchUserDetails();
+
+    try {
+      await refetchUserDetails();
+    } catch (e) {
+      console.error('Failed to refetch user details after tutorial update', e);
+    }
   });
 
   const pretestEssayQuery = useQuery(
     ['pretest', 'essay', userDifficultLevel],
     async () => {
-      const essayRef = collection(db, 'essays')
+      const essayRef = collection(db, 'essays');
 
       const preTestQuery = query(
         essayRef.withConverter<EssayDocumentWithId>({
@@ -71,7 +106,6 @@ export const TutorialContainer: FC<Props> = ({ }) => {
         where('category', '==', userDifficultLevel),
         limit(1)
       );
-
 
       const snapshot = await getDocs(preTestQuery);
       const [essay] = snapshot.docs.map((doc) => doc.data());
