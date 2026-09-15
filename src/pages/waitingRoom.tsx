@@ -10,8 +10,18 @@ import axios from 'axios';
 
 const API_BASE = 'https://apiv2-my3sfr4paq-uc.a.run.app';
 
+type CleverAuthResult = {
+  customToken?: string;
+  hasAvailableSeat?: boolean;
+  message?: string;
+};
+
 /** One Clever code can only be exchanged once — share in-flight work across remounts. */
-const exchangeByCode = new Map<string, Promise<{ customToken?: string; hasAvailableSeat?: boolean }>>();
+const exchangeByCode = new Map<string, Promise<CleverAuthResult>>();
+/** Last successful response per code (survives a twin request failing after the first succeeded). */
+const successfulResultByCode = new Map<string, CleverAuthResult>();
+
+const NO_SEATS_MESSAGE = 'No available seats for your district. Please contact your school.';
 
 function waitForAuthUser(timeoutMs = 2500): Promise<User | null> {
   if (auth.currentUser) {
@@ -34,25 +44,81 @@ function waitForAuthUser(timeoutMs = 2500): Promise<User | null> {
   });
 }
 
-function exchangeCleverCode(code: string, redirectUri: string) {
+function isNoSeatsResult(data: CleverAuthResult | null | undefined): boolean {
+  if (!data) return false;
+  if (data.hasAvailableSeat === false) return true;
+  if (typeof data.message === 'string' && data.message.toLowerCase().includes('no available seat')) {
+    return true;
+  }
+  return false;
+}
+
+function exchangeCleverCode(code: string, redirectUri: string): Promise<CleverAuthResult> {
+  const cachedSuccess = successfulResultByCode.get(code);
+  if (cachedSuccess) {
+    return Promise.resolve(cachedSuccess);
+  }
+
   const existing = exchangeByCode.get(code);
   if (existing) {
     return existing;
   }
 
-  const request = axios
+  // Register the promise before starting the request so remounts cannot open a second POST.
+  let resolvePromise!: (value: CleverAuthResult) => void;
+  let rejectPromise!: (reason?: unknown) => void;
+  const request = new Promise<CleverAuthResult>((resolve, reject) => {
+    resolvePromise = resolve;
+    rejectPromise = reject;
+  });
+  exchangeByCode.set(code, request);
+
+  axios
     .post(`${API_BASE}/oauthCleverAuth`, {
       code,
       redirect_uri: redirectUri
     })
-    .then((res) => (res?.data ?? {}) as { customToken?: string; hasAvailableSeat?: boolean })
+    .then((res) => {
+      const data = (res?.data ?? {}) as CleverAuthResult;
+      successfulResultByCode.set(code, data);
+      resolvePromise(data);
+    })
     .catch((err) => {
       exchangeByCode.delete(code);
-      throw err;
+      rejectPromise(err);
     });
 
-  exchangeByCode.set(code, request);
   return request;
+}
+
+function applyCleverAuthResult(
+  data: CleverAuthResult,
+  options: {
+    cancelled: () => boolean;
+    navigate: (path: string, opts: { replace: boolean }) => void;
+    setError: (message: string | null) => void;
+  }
+) {
+  const { cancelled, navigate, setError } = options;
+
+  if (cancelled()) return;
+
+  const customToken = data.customToken;
+
+  if (customToken && typeof customToken === 'string') {
+    return signInWithCustomToken(auth, customToken).then(() => {
+      if (cancelled()) return;
+      setError(null);
+      navigate('/', { replace: true });
+    });
+  }
+
+  if (isNoSeatsResult(data)) {
+    setError(typeof data.message === 'string' && data.message ? data.message : NO_SEATS_MESSAGE);
+    return;
+  }
+
+  setError('Sign-in could not be completed. Please try again.');
 }
 
 export const WaitingRoom: FC = () => {
@@ -66,6 +132,7 @@ export const WaitingRoom: FC = () => {
     if (!code) return;
 
     let cancelled = false;
+    const isCancelled = () => cancelled;
 
     const run = async () => {
       const existingUser = await waitForAuthUser(800);
@@ -82,28 +149,17 @@ export const WaitingRoom: FC = () => {
 
       try {
         const data = await exchangeCleverCode(code, redirectUri);
-        if (cancelled) return;
-
-        const customToken = data.customToken;
-        const hasAvailableSeat = data.hasAvailableSeat;
-
-        if (customToken && typeof customToken === 'string') {
-          await signInWithCustomToken(auth, customToken);
-          if (cancelled) return;
-          setError(null);
-          navigate('/', { replace: true });
-          return;
-        }
-
-        if (hasAvailableSeat === false) {
-          setError('No available seats for your district. Please contact your school.');
-        } else {
-          setError('Sign-in could not be completed. Please try again.');
-        }
+        await applyCleverAuthResult(data, { cancelled: isCancelled, navigate, setError });
       } catch (err) {
         if (cancelled) return;
 
-        // Twin/remount may have signed in successfully — wait before showing a false error.
+        // Twin request may have already completed successfully (e.g. no seats) before Clever rejected a reuse.
+        const cachedSuccess = successfulResultByCode.get(code);
+        if (cachedSuccess) {
+          await applyCleverAuthResult(cachedSuccess, { cancelled: isCancelled, navigate, setError });
+          return;
+        }
+
         const signedInUser = await waitForAuthUser(2500);
         if (cancelled) return;
 
