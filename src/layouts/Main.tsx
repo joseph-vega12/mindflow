@@ -30,16 +30,17 @@ export const MainLayout: FC = ({ children, ...props }) => {
   const handleTutorialWall = () => {
     const { pathname } = location;
 
+    if (pathname === '/tutorial') return;
+
     const tutorial = get(user, ['userDetails', 'activity', 'tutorial']);
-    const tasks: boolean[] = Object.values(tutorial ?? {});
-    const finishedTutorial = tasks.every((task) => task);
 
-    if (!tasks.length || !finishedTutorial) {
-      if (!tutorial.speedReadingTest && pathname.includes('/speed-read/')) return;
-      if (!tutorial.diagnosticTest && pathname.includes('/diagnostics/')) return;
+    // `finished` is the onboarding gate; step flags only drive the /tutorial UI.
+    if (tutorial?.finished) return;
 
-      navigate('/tutorial');
-    }
+    if (!tutorial?.speedReadingTest && pathname.includes('/speed-read/')) return;
+    if (!tutorial?.diagnosticTest && pathname.includes('/diagnostics/')) return;
+
+    navigate('/tutorial');
   };
 
   useEffect(() => {

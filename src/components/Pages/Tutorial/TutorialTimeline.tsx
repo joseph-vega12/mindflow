@@ -1,8 +1,8 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useState } from 'react';
 
-import { Box, BoxProps, Button, Grid, Heading, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
+import { Box, BoxProps, Button, Grid, Heading, Spinner, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import _, { get } from 'lodash';
+import _ from 'lodash';
 
 import {
   DiagnosticDocumentWithId,
@@ -20,7 +20,7 @@ import { db } from 'lib/firebase/firebaseInit';
 import { toast } from 'react-toastify';
 import { useAuthContext } from 'lib/firebase';
 import { useQuery } from 'react-query';
-import { collection, DocumentData, getDocs, query, where, WithFieldValue } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 interface Props {
   tutorial: UserTutorial;
@@ -43,7 +43,7 @@ export const TutorialTimeline: FC<Props> = ({
   tutorial,
   wordSpeed
 }) => {
-  const { user, isLoading: isLoadingUser } = useAuthContext();
+  const { user } = useAuthContext();
 
   const [isDiagnosticConfirmOpen, setIsDiagnosticConfirmOpen] = useState(false);
 
@@ -78,6 +78,7 @@ export const TutorialTimeline: FC<Props> = ({
       return diagnosticResults;
     },
     {
+      enabled: !!user?.uid,
       refetchOnMount: true,
       refetchOnWindowFocus: true
     }
@@ -93,7 +94,7 @@ export const TutorialTimeline: FC<Props> = ({
     toast.info('Now we are going to start our diagnostic test');
   };
 
-  if (isLoading || isLoadingUser) {
+  if (isLoading) {
     return (
       <Box h="50%" position="sticky" top="0" display="flex" justifyContent="center" alignItems="center">
         <Spinner boxSize="100px" thickness="4px" speed="0.8s" emptyColor="gray.100" color="blue.800" />
@@ -103,8 +104,7 @@ export const TutorialTimeline: FC<Props> = ({
 
   let scorePercentage = null;
 
-  if (diagnosticResultsQuery.data.length !== 0) {
-    console.log(diagnosticResultsQuery?.data, `data from here`)
+  if (diagnosticResultsQuery.data?.length) {
     scorePercentage = _.find(diagnosticResultsQuery?.data)?.result?.scorePercentage;
   }
 
@@ -251,21 +251,9 @@ const TutorialTimelineItem: FC<TutorialTimelineItemProps> = ({
   onClick,
   ...rest
 }) => {
-  const isCompleted = useMemo(() => {
-    if (!tutorialKey) return false;
-
-    return tutorial[tutorialKey];
-  }, [tutorial, tutorialKey]);
-
-  const isNextStep = useMemo(() => {
-    return !isCompleted && dependsOn?.every((key) => tutorial[key]);
-  }, [dependsOn, isCompleted, tutorial]);
-  const bgColor = useMemo(() => {
-    if (isCompleted) return 'green.500';
-    if (isNextStep) return 'blue.500';
-
-    return 'gray.500';
-  }, [isCompleted]);
+  const isCompleted = Boolean(tutorialKey && tutorial[tutorialKey]);
+  const isNextStep = !isCompleted && Boolean(dependsOn?.every((key) => tutorial[key as keyof UserTutorial]));
+  const bgColor = isCompleted ? 'green.500' : isNextStep ? 'blue.500' : 'gray.500';
 
   return (
     <Box

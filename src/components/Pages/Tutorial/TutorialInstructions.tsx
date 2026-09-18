@@ -10,9 +10,16 @@ import { useAuthContext } from 'lib/firebase';
 interface Props {
   onWelcomeVideoFinish: () => void;
   onTutorialVideoFinish: () => void;
+  showWelcomeVideo: boolean;
+  showTutorialVideo: boolean;
 }
 
-export const TutorialInstructions: FC<Props> = ({ onWelcomeVideoFinish, onTutorialVideoFinish }) => {
+export const TutorialInstructions: FC<Props> = ({
+  onWelcomeVideoFinish,
+  onTutorialVideoFinish,
+  showWelcomeVideo,
+  showTutorialVideo
+}) => {
   const { user } = useAuthContext();
 
   return (
@@ -27,38 +34,60 @@ export const TutorialInstructions: FC<Props> = ({ onWelcomeVideoFinish, onTutori
 
       <Divider borderTopColor="teal.500" mt={4} mb={10} borderTopWidth={2} />
 
-      <Box borderRadius={20} overflow="hidden" textAlign="center" shadow="md" mb={14}>
-        <VideoPlayer
-          id="welcome"
-          videoUrl="https://cdn.jwplayer.com/videos/0kIYNF2I.mp4"
-          onFinish={onWelcomeVideoFinish}
-        />
-        <Text fontSize="xl" bg="white" py={7} borderWidth={1} borderStyle="solid">
-          Welcome to MindFlow & Onboarding
-        </Text>
-      </Box>
+      {showWelcomeVideo ? (
+        <Box borderRadius={20} overflow="hidden" textAlign="center" shadow="md" mb={14}>
+          <VideoPlayer
+            id="welcome"
+            videoUrl="https://cdn.jwplayer.com/videos/0kIYNF2I.mp4"
+            onFinish={onWelcomeVideoFinish}
+          />
+          <Text fontSize="xl" bg="white" py={7} borderWidth={1} borderStyle="solid">
+            Welcome to MindFlow & Onboarding
+          </Text>
+        </Box>
+      ) : (
+        <Box
+          borderRadius={20}
+          textAlign="center"
+          shadow="md"
+          mb={14}
+          bg="green.50"
+          borderWidth={1}
+          borderColor="green.200"
+          py={7}
+          px={4}
+        >
+          <Text fontSize="xl" color="green.700" fontWeight="bold">
+            Welcome video completed
+          </Text>
+        </Box>
+      )}
 
-      <Box d="flex" flexDirection={{ lg: 'row', md: 'column' }}>
-        <Icon name="ready-set-go" fontSize="6xl" />
+      {showTutorialVideo ? (
+        <>
+          <Box d="flex" flexDirection={{ lg: 'row', md: 'column' }}>
+            <Icon name="ready-set-go" fontSize="6xl" />
 
-        <Text as="p" fontWeight="bold" color="gray.600" ml={{ lg: 8, md: 0 }} mr={{ lg: 2, md: 0 }}>
-          Now it’s your turn! Watch the video to understand how you use the platform. Learn about the different
-          techniques, the components of the platform, and how the system tracks your progress and improvements.
-        </Text>
-      </Box>
+            <Text as="p" fontWeight="bold" color="gray.600" ml={{ lg: 8, md: 0 }} mr={{ lg: 2, md: 0 }}>
+              Now it’s your turn! Watch the video to understand how you use the platform. Learn about the different
+              techniques, the components of the platform, and how the system tracks your progress and improvements.
+            </Text>
+          </Box>
 
-      <Divider borderTopColor="teal.500" mt={4} mb={10} borderTopWidth={2} />
+          <Divider borderTopColor="teal.500" mt={4} mb={10} borderTopWidth={2} />
 
-      <Box borderRadius={20} textAlign="center" shadow="md">
-        <VideoPlayer
-          id="tutorial"
-          videoUrl="https://cdn.jwplayer.com/videos/3nQyI6Nj.mp4"
-          onFinish={onTutorialVideoFinish}
-        />
-        <Text fontSize="xl" bg="white" py={7} borderWidth={1} borderStyle="solid">
-          How does MindFlow work?
-        </Text>
-      </Box>
+          <Box borderRadius={20} overflow="hidden" textAlign="center" shadow="md">
+            <VideoPlayer
+              id="tutorial"
+              videoUrl="https://cdn.jwplayer.com/videos/3nQyI6Nj.mp4"
+              onFinish={onTutorialVideoFinish}
+            />
+            <Text fontSize="xl" bg="white" py={7} borderWidth={1} borderStyle="solid">
+              How does MindFlow work?
+            </Text>
+          </Box>
+        </>
+      ) : null}
     </Box>
   );
 };
