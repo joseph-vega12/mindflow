@@ -32,20 +32,13 @@ export const VideoPlayer: FC<Props> = ({ videoUrl, onFinish, id, ...rest }) => {
   const handleReady = useCallback(() => {
     if (!id || typeof window === 'undefined') return;
 
-    // Extra complete listener — beforeComplete/percent props alone are unreliable
-    // across JW player script versions.
+    // Prefer the real JW "complete" event so progress isn't marked ~5% early.
     try {
       // @ts-ignore
       const player = window.jwplayer?.(id);
       if (!player?.on) return;
 
       player.on('complete', handleFinish);
-      player.on('time', (event: { position?: number; duration?: number }) => {
-        const { position = 0, duration = 0 } = event || {};
-        if (duration > 0 && position / duration >= 0.95) {
-          handleFinish();
-        }
-      });
     } catch (e) {
       console.error('Failed to attach JW player finish listeners', e);
     }
@@ -59,7 +52,6 @@ export const VideoPlayer: FC<Props> = ({ videoUrl, onFinish, id, ...rest }) => {
         file={videoUrl}
         onReady={handleReady}
         onOneHundredPercent={handleFinish}
-        onNinetyFivePercent={handleFinish}
       />
     </Box>
   );
