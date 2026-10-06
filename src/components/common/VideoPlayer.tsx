@@ -12,6 +12,7 @@ interface Props extends BoxProps {
 export const VideoPlayer: FC<Props> = ({ videoUrl, onFinish, id, ...rest }) => {
   const onFinishRef = useRef(onFinish);
   const hasFinishedRef = useRef(false);
+  const finishTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     onFinishRef.current = onFinish;
@@ -19,20 +20,28 @@ export const VideoPlayer: FC<Props> = ({ videoUrl, onFinish, id, ...rest }) => {
 
   useEffect(() => {
     hasFinishedRef.current = false;
+    return () => {
+      if (finishTimeoutRef.current) {
+        clearTimeout(finishTimeoutRef.current);
+      }
+    };
   }, [videoUrl, id]);
 
   // react-jw-player binds some callbacks only at player init and ignores prop updates.
-  // Keep a stable handler that always delegates to the latest onFinish ref.
+  // Defer onFinish so React doesn't unmount the player inside JW's complete handler
+  // (that teardown race blanks the whole page until a manual refresh).
   const handleFinish = useCallback(() => {
     if (hasFinishedRef.current) return;
     hasFinishedRef.current = true;
-    onFinishRef.current?.();
+
+    finishTimeoutRef.current = setTimeout(() => {
+      onFinishRef.current?.();
+    }, 300);
   }, []);
 
   const handleReady = useCallback(() => {
     if (!id || typeof window === 'undefined') return;
 
-    // Prefer the real JW "complete" event so progress isn't marked ~5% early.
     try {
       // @ts-ignore
       const player = window.jwplayer?.(id);

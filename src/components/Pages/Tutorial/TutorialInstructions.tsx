@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { Box, Divider, Flex, Text } from '@chakra-ui/react';
 
@@ -14,6 +14,22 @@ interface Props {
   showTutorialVideo: boolean;
 }
 
+const useDelayedHide = (isVisible: boolean, delayMs = 400) => {
+  const [shouldRender, setShouldRender] = useState(isVisible);
+
+  useEffect(() => {
+    if (isVisible) {
+      setShouldRender(true);
+      return;
+    }
+
+    const timeoutId = setTimeout(() => setShouldRender(false), delayMs);
+    return () => clearTimeout(timeoutId);
+  }, [isVisible, delayMs]);
+
+  return shouldRender;
+};
+
 export const TutorialInstructions: FC<Props> = ({
   onWelcomeVideoFinish,
   onTutorialVideoFinish,
@@ -21,6 +37,8 @@ export const TutorialInstructions: FC<Props> = ({
   showTutorialVideo
 }) => {
   const { user } = useAuthContext();
+  const renderWelcomeVideo = useDelayedHide(showWelcomeVideo);
+  const renderTutorialVideo = useDelayedHide(showTutorialVideo);
 
   return (
     <Box d="flex" flexDir="column">
@@ -34,7 +52,7 @@ export const TutorialInstructions: FC<Props> = ({
 
       <Divider borderTopColor="teal.500" mt={4} mb={10} borderTopWidth={2} />
 
-      {showWelcomeVideo ? (
+      {renderWelcomeVideo ? (
         <Box borderRadius={20} overflow="hidden" textAlign="center" shadow="md" mb={14}>
           <VideoPlayer
             id="welcome"
@@ -42,7 +60,7 @@ export const TutorialInstructions: FC<Props> = ({
             onFinish={onWelcomeVideoFinish}
           />
           <Text fontSize="xl" bg="white" py={7} borderWidth={1} borderStyle="solid">
-            Welcome to MindFlow & Onboarding
+            {!showWelcomeVideo ? 'Welcome video completed' : 'Welcome to MindFlow & Onboarding'}
           </Text>
         </Box>
       ) : (
@@ -63,7 +81,7 @@ export const TutorialInstructions: FC<Props> = ({
         </Box>
       )}
 
-      {showTutorialVideo ? (
+      {renderTutorialVideo ? (
         <>
           <Box d="flex" flexDirection={{ lg: 'row', md: 'column' }}>
             <Icon name="ready-set-go" fontSize="6xl" />
@@ -83,7 +101,7 @@ export const TutorialInstructions: FC<Props> = ({
               onFinish={onTutorialVideoFinish}
             />
             <Text fontSize="xl" bg="white" py={7} borderWidth={1} borderStyle="solid">
-              How does MindFlow work?
+              {!showTutorialVideo ? 'Tutorial video completed' : 'How does MindFlow work?'}
             </Text>
           </Box>
         </>
