@@ -27,16 +27,14 @@ export const VideoPlayer: FC<Props> = ({ videoUrl, onFinish, id, ...rest }) => {
     };
   }, [videoUrl, id]);
 
-  // react-jw-player binds some callbacks only at player init and ignores prop updates.
-  // Defer onFinish so React doesn't unmount the player inside JW's complete handler
-  // (that teardown race blanks the whole page until a manual refresh).
+  // Defer React state updates so they don't run inside JW's complete/remove DOM cycle.
   const handleFinish = useCallback(() => {
     if (hasFinishedRef.current) return;
     hasFinishedRef.current = true;
 
     finishTimeoutRef.current = setTimeout(() => {
       onFinishRef.current?.();
-    }, 300);
+    }, 0);
   }, []);
 
   const handleReady = useCallback(() => {
@@ -46,15 +44,16 @@ export const VideoPlayer: FC<Props> = ({ videoUrl, onFinish, id, ...rest }) => {
       // @ts-ignore
       const player = window.jwplayer?.(id);
       if (!player?.on) return;
-
       player.on('complete', handleFinish);
     } catch (e) {
       console.error('Failed to attach JW player finish listeners', e);
     }
   }, [handleFinish, id]);
 
+  // Do not put `id` on the Chakra wrapper — ReactJWPlayer already uses playerId as the
+  // DOM id. Duplicate ids + JW's DOM mutation causes React removeChild crashes.
   return (
-    <Box id={id} {...rest}>
+    <Box {...rest}>
       <ReactJWPlayer
         playerId={id || videoUrl}
         playerScript="https://cdn.jwplayer.com/libraries/qQXZCMwI.js"

@@ -14,20 +14,19 @@ interface Props {
   showTutorialVideo: boolean;
 }
 
-const useDelayedHide = (isVisible: boolean, delayMs = 400) => {
-  const [shouldRender, setShouldRender] = useState(isVisible);
+// Once a JW player has mounted, keep it mounted for this page session.
+// Unmounting after "complete" races JW's DOM teardown and blanks the page
+// (React removeChild NotFoundError).
+const useStickyMount = (shouldShow: boolean) => {
+  const [mounted, setMounted] = useState(shouldShow);
 
   useEffect(() => {
-    if (isVisible) {
-      setShouldRender(true);
-      return;
+    if (shouldShow) {
+      setMounted(true);
     }
+  }, [shouldShow]);
 
-    const timeoutId = setTimeout(() => setShouldRender(false), delayMs);
-    return () => clearTimeout(timeoutId);
-  }, [isVisible, delayMs]);
-
-  return shouldRender;
+  return mounted;
 };
 
 export const TutorialInstructions: FC<Props> = ({
@@ -37,30 +36,41 @@ export const TutorialInstructions: FC<Props> = ({
   showTutorialVideo
 }) => {
   const { user } = useAuthContext();
-  const renderWelcomeVideo = useDelayedHide(showWelcomeVideo);
-  const renderTutorialVideo = useDelayedHide(showTutorialVideo);
+  const welcomeMounted = useStickyMount(showWelcomeVideo);
+  const tutorialMounted = useStickyMount(showTutorialVideo);
 
   return (
     <Box d="flex" flexDir="column">
       <Flex flexDirection={{ lg: 'row', md: 'column' }} alignItems="center">
         <Icon name="welcome" fontSize="6xl" />
         <Text as="p" fontWeight="bold" color="gray.600" ml={{ lg: 8, md: 0 }} mr={{ lg: 2, md: 0 }}>
-          Welcome to MindFlow, {user?.userDetails.firstName}! <br />
+          Welcome to MindFlow, {user?.userDetails?.firstName}! <br />
           Follow the next steps to learn how the platform works and to begin your speed reading training.
         </Text>
       </Flex>
 
       <Divider borderTopColor="teal.500" mt={4} mb={10} borderTopWidth={2} />
 
-      {renderWelcomeVideo ? (
+      {welcomeMounted ? (
         <Box borderRadius={20} overflow="hidden" textAlign="center" shadow="md" mb={14}>
-          <VideoPlayer
-            id="welcome"
-            videoUrl="https://cdn.jwplayer.com/videos/0kIYNF2I.mp4"
-            onFinish={onWelcomeVideoFinish}
-          />
-          <Text fontSize="xl" bg="white" py={7} borderWidth={1} borderStyle="solid">
-            {!showWelcomeVideo ? 'Welcome video completed' : 'Welcome to MindFlow & Onboarding'}
+          <Box display={showWelcomeVideo ? 'block' : 'none'}>
+            <VideoPlayer
+              id="welcome"
+              videoUrl="https://cdn.jwplayer.com/videos/0kIYNF2I.mp4"
+              onFinish={onWelcomeVideoFinish}
+            />
+          </Box>
+          <Text
+            fontSize="xl"
+            bg={showWelcomeVideo ? 'white' : 'green.50'}
+            color={showWelcomeVideo ? undefined : 'green.700'}
+            fontWeight={showWelcomeVideo ? 'normal' : 'bold'}
+            py={7}
+            borderWidth={1}
+            borderStyle="solid"
+            borderColor={showWelcomeVideo ? undefined : 'green.200'}
+          >
+            {showWelcomeVideo ? 'Welcome to MindFlow & Onboarding' : 'Welcome video completed'}
           </Text>
         </Box>
       ) : (
@@ -81,7 +91,7 @@ export const TutorialInstructions: FC<Props> = ({
         </Box>
       )}
 
-      {renderTutorialVideo ? (
+      {tutorialMounted ? (
         <>
           <Box d="flex" flexDirection={{ lg: 'row', md: 'column' }}>
             <Icon name="ready-set-go" fontSize="6xl" />
@@ -95,13 +105,24 @@ export const TutorialInstructions: FC<Props> = ({
           <Divider borderTopColor="teal.500" mt={4} mb={10} borderTopWidth={2} />
 
           <Box borderRadius={20} overflow="hidden" textAlign="center" shadow="md">
-            <VideoPlayer
-              id="tutorial"
-              videoUrl="https://cdn.jwplayer.com/videos/3nQyI6Nj.mp4"
-              onFinish={onTutorialVideoFinish}
-            />
-            <Text fontSize="xl" bg="white" py={7} borderWidth={1} borderStyle="solid">
-              {!showTutorialVideo ? 'Tutorial video completed' : 'How does MindFlow work?'}
+            <Box display={showTutorialVideo ? 'block' : 'none'}>
+              <VideoPlayer
+                id="tutorial"
+                videoUrl="https://cdn.jwplayer.com/videos/3nQyI6Nj.mp4"
+                onFinish={onTutorialVideoFinish}
+              />
+            </Box>
+            <Text
+              fontSize="xl"
+              bg={showTutorialVideo ? 'white' : 'green.50'}
+              color={showTutorialVideo ? undefined : 'green.700'}
+              fontWeight={showTutorialVideo ? 'normal' : 'bold'}
+              py={7}
+              borderWidth={1}
+              borderStyle="solid"
+              borderColor={showTutorialVideo ? undefined : 'green.200'}
+            >
+              {showTutorialVideo ? 'How does MindFlow work?' : 'Tutorial video completed'}
             </Text>
           </Box>
         </>
