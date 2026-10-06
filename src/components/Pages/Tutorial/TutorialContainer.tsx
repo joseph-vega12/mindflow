@@ -287,23 +287,29 @@ export const TutorialContainer: FC<Props> = ({}) => {
     [tutorial.welcomeVideo, tutorial.speedReadingTest, tutorial.diagnosticTest]
   );
 
-  const onVideoFinish = useCallback((videoType: TutorialVideoType) => {
-    const currentTutorial = tutorialRef.current;
+  const onVideoFinish = useCallback(
+    (videoType: TutorialVideoType) => {
+      const currentTutorial = tutorialRef.current;
 
-    if (videoType === 'welcome' && !currentTutorial.welcomeVideo) {
-      updateTutorialKeyMutation.mutate('welcomeVideo');
-      return;
-    }
+      if (videoType === 'welcome' && !currentTutorial.welcomeVideo) {
+        // Paint timeline immediately, then persist.
+        applyTutorialPatchLocally({ welcomeVideo: true });
+        updateTutorialKeyMutation.mutate('welcomeVideo');
+        return;
+      }
 
-    const prerequisitesMet =
-      currentTutorial.welcomeVideo &&
-      currentTutorial.speedReadingTest &&
-      currentTutorial.diagnosticTest;
+      const prerequisitesMet =
+        currentTutorial.welcomeVideo &&
+        currentTutorial.speedReadingTest &&
+        currentTutorial.diagnosticTest;
 
-    if (videoType === 'tutorial' && prerequisitesMet && !currentTutorial.tutorialVideo) {
-      updateTutorialKeyMutation.mutate({ tutorialVideo: true });
-    }
-  }, [updateTutorialKeyMutation]);
+      if (videoType === 'tutorial' && prerequisitesMet && !currentTutorial.tutorialVideo) {
+        applyTutorialPatchLocally({ tutorialVideo: true });
+        updateTutorialKeyMutation.mutate({ tutorialVideo: true });
+      }
+    },
+    [applyTutorialPatchLocally, updateTutorialKeyMutation]
+  );
 
   const onWelcomeVideoFinish = useCallback(() => onVideoFinish('welcome'), [onVideoFinish]);
   const onTutorialVideoFinish = useCallback(() => onVideoFinish('tutorial'), [onVideoFinish]);
