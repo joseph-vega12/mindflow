@@ -1,9 +1,9 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { get, merge } from 'lodash';
+import { get } from 'lodash';
 import { SimpleGrid } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -13,58 +13,137 @@ import { BasePage } from 'components/layout/Pages';
 
 import { TutorialInstructions, TutorialTimeline } from './index';
 import { useAuthContext } from 'lib/firebase';
-import { collection, doc, getDocs, limit, query, setDoc, where } from 'firebase/firestore';
+import { collection, doc, getDocs, limit, query, updateDoc, where } from 'firebase/firestore';
 import { db } from 'lib/firebase/firebaseInit';
 
-interface Props { }
+interface Props {}
 
 export type TutorialVideoType = 'welcome' | 'tutorial';
-export const TutorialContainer: FC<Props> = ({ }) => {
+
+const EMPTY_TUTORIAL: UserTutorial = {
+  welcomeVideo: false,
+  speedReadingTest: false,
+  diagnosticTest: false,
+  tutorialVideo: false,
+  finished: false
+};
+
+export const TutorialContainer: FC<Props> = ({}) => {
   const { isLoading: isLoadingUser, refetchUserDetails, user } = useAuthContext();
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
 
-  const tutorial = useMemo(
-    () =>
-      get(user, ['userDetails', 'activity', 'tutorial'], {
-        welcomeVideo: false,
-        speedReadingTest: false,
-        diagnosticTest: false,
-        tutorialVideo: false,
-        finished: false
-      }),
+  const remoteTutorial = useMemo(
+    () => get(user, ['userDetails', 'activity', 'tutorial'], EMPTY_TUTORIAL) as UserTutorial,
     [user]
   );
+
+  // Optimistic overlay so timeline unlocks immediately after video/test completion,
+  // without waiting on a slow/stale user refetch.
+  const [optimisticTutorial, setOptimisticTutorial] = useState<Partial<UserTutorial>>({});
+
+  useEffect(() => {
+    setOptimisticTutorial((prev) => {
+      const next = { ...prev };
+      (Object.keys(EMPTY_TUTORIAL) as (keyof UserTutorial)[]).forEach((key) => {
+        if (remoteTutorial[key]) {
+          delete next[key];
+        }
+      });
+      return next;
+    });
+  }, [remoteTutorial]);
+
+  const tutorial = useMemo(
+    () => ({
+      ...EMPTY_TUTORIAL,
+      ...remoteTutorial,
+      ...optimisticTutorial
+    }),
+    [remoteTutorial, optimisticTutorial]
+  );
+
+  const tutorialRef = useRef(tutorial);
+  tutorialRef.current = tutorial;
 
   const userDifficultLevel = user?.userDetails?.difficultLevel;
   const testType = user?.userDetails?.testType ?? '';
 
-  const updateTutorialKeyMutation = useMutation(async (update: keyof UserTutorial | Partial<UserTutorial>) => {
-    try {
-      const patch = typeof update === 'string' ? { [update]: true } : update;
-      const newTutorial = merge({}, tutorial, patch);
+  const applyTutorialPatchLocally = useCallback(
+    (patch: Partial<UserTutorial>) => {
+      setOptimisticTutorial((prev) => ({ ...prev, ...patch }));
 
-      await setDoc(
-        doc(db, 'users', user?.uid),
-        {
-          activity: {
-            tutorial: newTutorial
+      // Keep auth user cache in sync so the timeline doesn't wait on a refetch/refresh.
+      // Never introduce false defaults here — that can wipe true step flags in memory.
+      queryClient.setQueryData(['user'], (old: any) => {
+        if (!old?.userDetails) return old;
+
+        const previousTutorial = old.userDetails.activity?.tutorial ?? {};
+
+        return {
+          ...old,
+          userDetails: {
+            ...old.userDetails,
+            activity: {
+              ...old.userDetails.activity,
+              tutorial: {
+                ...previousTutorial,
+                ...patch
+              }
+            }
           }
-        },
-        { merge: true }
-      );
+        };
+      });
+    },
+    [queryClient]
+  );
 
-      await refetchUserDetails();
-    } catch (e) {
-      console.log(e);
-      throw e;
+  const updateTutorialKeyMutation = useMutation(
+    async (update: keyof UserTutorial | Partial<UserTutorial>) => {
+      if (!user?.uid) {
+        throw new Error('User is required to update tutorial progress');
+      }
+
+      const patch = typeof update === 'string' ? { [update]: true } : update;
+
+      const tutorialPatch = Object.entries(patch).reduce((acc, [key, value]) => {
+        acc[`activity.tutorial.${key}`] = value as boolean;
+        return acc;
+      }, {} as Record<string, boolean>);
+
+      await updateDoc(doc(db, 'users', user.uid), tutorialPatch);
+      return patch;
+    },
+    {
+      onMutate(update) {
+        const patch = typeof update === 'string' ? { [update]: true } : update;
+        applyTutorialPatchLocally(patch);
+        return { patch };
+      },
+      onError(_error, _update, context) {
+        if (context?.patch) {
+          setOptimisticTutorial((prev) => {
+            const next = { ...prev };
+            Object.keys(context.patch).forEach((key) => {
+              delete next[key as keyof UserTutorial];
+            });
+            return next;
+          });
+        }
+        toast.error("We couldn't save your tutorial progress. Please try again.");
+        // Fall back to server state if the write failed.
+        refetchUserDetails();
+      }
+      // Intentionally skip refetch on success: a stale getDoc can overwrite the
+      // local cache patch and make the timeline look like progress was erased.
     }
-  });
+  );
 
   const pretestEssayQuery = useQuery(
     ['pretest', 'essay', userDifficultLevel],
     async () => {
-      const essayRef = collection(db, 'essays')
+      const essayRef = collection(db, 'essays');
 
       const preTestQuery = query(
         essayRef.withConverter<EssayDocumentWithId>({
@@ -78,7 +157,6 @@ export const TutorialContainer: FC<Props> = ({ }) => {
         where('category', '==', userDifficultLevel),
         limit(1)
       );
-
 
       const snapshot = await getDocs(preTestQuery);
       const [essay] = snapshot.docs.map((doc) => doc.data());
@@ -148,11 +226,11 @@ export const TutorialContainer: FC<Props> = ({ }) => {
     },
     {
       enabled: !!pretestEssayQuery.data,
+      refetchOnMount: 'always',
       refetchOnWindowFocus: true,
       onSuccess(result) {
-        if (result && !tutorial.speedReadingTest) {
+        if (result && !tutorialRef.current.speedReadingTest) {
           updateTutorialKeyMutation.mutate('speedReadingTest');
-          refetchUserDetails();
         }
       }
     }
@@ -173,13 +251,12 @@ export const TutorialContainer: FC<Props> = ({ }) => {
     },
     {
       enabled: !!diagnosticQuery.data,
+      refetchOnMount: 'always',
       refetchOnWindowFocus: true,
       onSuccess(result) {
-        if (result && !tutorial.diagnosticTest) {
+        if (result && !tutorialRef.current.diagnosticTest) {
           updateTutorialKeyMutation.mutate('diagnosticTest');
-          refetchUserDetails();
         }
-        // updateTutorialKeyMutation.mutate('finished');
       }
     }
   );
@@ -204,18 +281,54 @@ export const TutorialContainer: FC<Props> = ({ }) => {
     toast.info(`You can proceed and play the ${videoType} video!`);
   };
 
-  const onVideoFinish = (videoType: TutorialVideoType) => {
-    if (videoType === 'welcome' && !tutorial.welcomeVideo) {
-      updateTutorialKeyMutation.mutate('welcomeVideo');
-    }
-    if (videoType === 'tutorial' && tutorial.speedReadingTest && !tutorial.tutorialVideo) {
-      updateTutorialKeyMutation.mutate({ tutorialVideo: true, finished: true });
-    }
-  };
+  const canWatchTutorialVideo = useMemo(
+    () =>
+      Boolean(tutorial.welcomeVideo && tutorial.speedReadingTest && tutorial.diagnosticTest),
+    [tutorial.welcomeVideo, tutorial.speedReadingTest, tutorial.diagnosticTest]
+  );
+
+  const onVideoFinish = useCallback(
+    (videoType: TutorialVideoType) => {
+      const currentTutorial = tutorialRef.current;
+
+      if (videoType === 'welcome' && !currentTutorial.welcomeVideo) {
+        // Paint timeline immediately, then persist.
+        applyTutorialPatchLocally({ welcomeVideo: true });
+        updateTutorialKeyMutation.mutate('welcomeVideo');
+        return;
+      }
+
+      const prerequisitesMet =
+        currentTutorial.welcomeVideo &&
+        currentTutorial.speedReadingTest &&
+        currentTutorial.diagnosticTest;
+
+      if (videoType === 'tutorial' && prerequisitesMet && !currentTutorial.tutorialVideo) {
+        applyTutorialPatchLocally({ tutorialVideo: true });
+        updateTutorialKeyMutation.mutate({ tutorialVideo: true });
+      }
+    },
+    [applyTutorialPatchLocally, updateTutorialKeyMutation]
+  );
+
+  const onWelcomeVideoFinish = useCallback(() => onVideoFinish('welcome'), [onVideoFinish]);
+  const onTutorialVideoFinish = useCallback(() => onVideoFinish('tutorial'), [onVideoFinish]);
 
   const handleCompleteOnboarding = async () => {
+    const currentTutorial = tutorialRef.current;
+    const prerequisitesMet =
+      currentTutorial.welcomeVideo &&
+      currentTutorial.speedReadingTest &&
+      currentTutorial.diagnosticTest &&
+      currentTutorial.tutorialVideo;
+
+    if (!prerequisitesMet) {
+      toast.info('Please complete the previous onboarding steps first.');
+      return;
+    }
+
     try {
-      if (!tutorial.finished) {
+      if (!currentTutorial.finished) {
         await updateTutorialKeyMutation.mutateAsync({ finished: true });
       }
       navigate('/');
@@ -225,13 +338,20 @@ export const TutorialContainer: FC<Props> = ({ }) => {
     }
   };
 
-  const isLoading =
-    pretestEssayQuery.isLoading || isLoadingUser || checkDiagnosticResult.isLoading || checkTestResult.isLoading;
+  // Keep the timeline mounted while secondary result checks load/refetch so
+  // video progress can paint immediately after completion.
+  const isInitialUserLoading = isLoadingUser && !user?.userDetails;
+  const isLoading = pretestEssayQuery.isLoading || isInitialUserLoading;
 
   return (
     <BasePage boxShadow="none" spacing="md">
       <SimpleGrid columns={2} spacing={10}>
-        <TutorialInstructions onVideoFinish={onVideoFinish} />
+        <TutorialInstructions
+          onWelcomeVideoFinish={onWelcomeVideoFinish}
+          onTutorialVideoFinish={onTutorialVideoFinish}
+          showWelcomeVideo={!tutorial.welcomeVideo}
+          showTutorialVideo={canWatchTutorialVideo && !tutorial.tutorialVideo}
+        />
         <TutorialTimeline
           isLoading={isLoading}
           handleStartVideo={handleStartVideo}

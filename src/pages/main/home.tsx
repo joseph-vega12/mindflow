@@ -25,7 +25,7 @@ import { db } from 'lib/firebase/firebaseInit';
 import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 
 export const Home: FC = () => {
-  const { user, refetchUserDetails } = useAuthContext();
+  const { user } = useAuthContext();
 
   const { firestore } = useFirebaseContext();
 
@@ -38,22 +38,11 @@ export const Home: FC = () => {
   const [playlists, playlistsLoading] = usePlaylists(playlistsIds);
 
   useEffect(() => {
-    refetchUserDetails();
-  }, [refetchUserDetails]);
+    const tutorial = get(user, ['userDetails', 'activity', 'tutorial']);
 
-  useEffect(() => {
-    const checkTutorialCompletion = async () => {
-      const tutorial = get(user, ['userDetails', 'activity', 'tutorial']);
-      const tasks: boolean[] = Object.values(tutorial ?? {});
-      const finishedTutorial = tasks.every((task) => task);
-
-      if (!tasks.length || !finishedTutorial) {
-        return navigate('/tutorial');
-      }
-    };
-
-    if (user) {
-      checkTutorialCompletion();
+    // `finished` is the onboarding gate; step flags only drive the /tutorial UI.
+    if (user && !tutorial?.finished) {
+      navigate('/tutorial');
     }
   }, [user, navigate]);
 

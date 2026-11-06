@@ -79,11 +79,7 @@ export const AddBusinessUserForm: FC<any> = ({ isLoading, onSubmit, businessData
       password: string;
     }
   >({
-    defaultValues: {
-      whereDidYouHearAboutUs: 'other',
-      currentLevel: 'college',
-      testType: 'gmat'
-    }
+    defaultValues: {}
   });
   const { firestore } = useFirebaseContext();
   const formValues = watch();
@@ -107,7 +103,7 @@ export const AddBusinessUserForm: FC<any> = ({ isLoading, onSubmit, businessData
   };
 
   const handleFormSubmit = (fields: SubmitValues) => {
-    const result = userSubmitSchema.validate(fields, { abortEarly: true });
+    const result = userSubmitSchema.validate(fields, { abortEarly: true, stripUnknown: true });
 
     if (result.error) {
       return toast.error(result.error.message);

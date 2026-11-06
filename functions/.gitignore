@@ -7,6 +7,11 @@ typings/
 # Node.js dependency directory
 node_modules/
 
+# Local secrets / env files — never commit
+.env
+.env.*
+!.env.example
+
 # Logs
 firebase-debug.log
 database-debug.log

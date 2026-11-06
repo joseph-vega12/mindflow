@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import moment from 'moment';
 
 import { auth, db } from "lib/firebase/firebaseInit";
-import { collection, doc, getDoc, getDocs, updateDoc, where, limit, query, WithFieldValue, DocumentData } from "firebase/firestore";
+import { collection, doc, getDocFromServer, getDocs, updateDoc, where, limit, query, WithFieldValue, DocumentData } from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { toast } from 'react-toastify';
@@ -38,7 +38,8 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       if (!firebaseAuthUser) return null;
 
       const userDetailsDocRef = doc(collection(db, 'users'), firebaseAuthUser.uid);
-      const userDetailsSnap = await getDoc(userDetailsDocRef);
+      // Prefer server read so a just-written tutorial flag isn't overwritten by a stale cache.
+      const userDetailsSnap = await getDocFromServer(userDetailsDocRef);
 
       const userDetails = userDetailsSnap.data() as UserDetails;
 
@@ -79,8 +80,8 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       };
     },
     {
-      cacheTime: 15000,
-      keepPreviousData: false,
+      cacheTime: 1000 * 60 * 30,
+      keepPreviousData: true,
       refetchOnWindowFocus: false,
       enabled: !!firebaseInitialized && !!firebaseAuthUser,
       onSettled(userResp) {

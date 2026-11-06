@@ -111,7 +111,7 @@ export const LoginPage: FC<Props> = ({ }) => {
                   </Text>
                   <Box
                     as="a"
-                    href="https://clever.com/oauth/authorize?response_type=code&redirect_uri=https://app.mindflowspeedreading.com/oauth/waiting-room/oauth/waiting-room&client_id=cd1b6420ec8e5c812029"
+                    href="https://clever.com/oauth/authorize?response_type=code&redirect_uri=https://app.mindflowspeedreading.com/oauth/waiting-room&client_id=cd1b6420ec8e5c812029"
                     target="_self"
                     display="block"
                     w="100%"
