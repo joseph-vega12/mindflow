@@ -21,6 +21,11 @@ functions/ui-debug.log
 
 # production
 /build
+/dist
+
+functions/.env
+functions/.env.*
+!functions/.env.example
 
 # misc
 .DS_Store

@@ -10,3 +10,8 @@ node_modules/
 # Logs
 firebase-debug.log
 database-debug.log
+
+# Local environment (secrets)
+.env
+.env.*
+!.env.example

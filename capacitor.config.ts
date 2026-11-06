@@ -1,9 +1,9 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.mindflowspeedreading.app',
+  appId: 'mindflow.app',
   appName: 'mindflow',
-  webDir: 'www'
+  webDir: 'dist'
 };
 
 export default config;
