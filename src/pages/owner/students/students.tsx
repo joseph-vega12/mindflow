@@ -1,13 +1,14 @@
 import React, { FC, useMemo } from 'react';
 
 import { Flex as ChakraFlex } from '@chakra-ui/react';
+import moment from 'moment';
 import { useFormContext } from 'react-hook-form';
 import { useQuery } from 'react-query';
 
 import { StudentsPanelFilters, StudentsPanelListing } from 'components/Pages/Owner/OwnerStudentsPanel';
 
 import { UserDetails, UserDetailsWithId } from 'types';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from 'lib/firebase/firebaseInit';
 
 export const OwnerStudentsPanel: FC = () => {
@@ -102,6 +103,20 @@ export const OwnerStudentsPanel: FC = () => {
       if (districtIdFilter) {
         list = list.filter((student) => student.schoolName === districtIdFilter);
       }
+
+      const lastSeenStart = values?.cleverLastSeenStart;
+      const lastSeenEnd = values?.cleverLastSeenEnd;
+      if (lastSeenStart || lastSeenEnd) {
+        const startMs = lastSeenStart ? moment(lastSeenStart).startOf('day').valueOf() : null;
+        const endMs = lastSeenEnd ? moment(lastSeenEnd).endOf('day').valueOf() : null;
+        list = list.filter((student) => {
+          const lastSeen = student?.lastSeen;
+          if (!lastSeen) return false;
+          if (startMs != null && lastSeen < startMs) return false;
+          if (endMs != null && lastSeen > endMs) return false;
+          return true;
+        });
+      }
     }
     const search = values?.searchStudents?.toLocaleLowerCase() ?? '';
     const filteredStudentsBySearch = list.filter((student) => {
@@ -116,7 +131,9 @@ export const OwnerStudentsPanel: FC = () => {
     studentsQuery.data,
     values?.searchStudents,
     values?.showCleverStudents,
-    values?.districtIdFilter
+    values?.districtIdFilter,
+    values?.cleverLastSeenStart,
+    values?.cleverLastSeenEnd
   ]);
 
   return (

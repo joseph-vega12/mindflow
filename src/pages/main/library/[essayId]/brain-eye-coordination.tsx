@@ -101,8 +101,8 @@ export const BrainEyeCoordinationTest: FC<{}> = () => {
       category: essay?.category,
       user: {
         id: user?.uid ?? null,
-        firstName: user?.userDetails?.firstName,
-        lastName: user?.userDetails?.lastName,
+        firstName: user?.userDetails?.firstName ?? null,
+        lastName: user?.userDetails?.lastName ?? null,
         picture: user?.userDetails?.picture ?? null
       }
     };

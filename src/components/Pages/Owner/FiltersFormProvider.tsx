@@ -10,6 +10,12 @@ export interface AnalyticsFilterForm {
   testType: TestType;
   startDate: string;
   endDate: string;
+  showCleverStudents?: boolean;
+  districtIdFilter?: string;
+  searchStudents?: string;
+  cleverLastSeenStart?: string;
+  cleverLastSeenEnd?: string;
+  whereDidYouHearAboutUs?: string;
 }
 
 export const FiltersFormProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -18,7 +24,13 @@ export const FiltersFormProvider: FC<PropsWithChildren> = ({ children }) => {
       testType: null,
       difficultLevel: null,
       startDate: moment().subtract(7, 'days').format('YYYY-MM-DD'),
-      endDate: moment().format('YYYY-MM-DD')
+      endDate: moment().format('YYYY-MM-DD'),
+      showCleverStudents: false,
+      districtIdFilter: '',
+      searchStudents: '',
+      cleverLastSeenStart: '',
+      cleverLastSeenEnd: '',
+      whereDidYouHearAboutUs: ''
     }
   });
 

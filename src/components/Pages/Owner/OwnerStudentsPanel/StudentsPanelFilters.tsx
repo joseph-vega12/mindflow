@@ -47,9 +47,13 @@ export const StudentsPanelFilters: FC<Props> = ({ students, uniqueDistrictIds = 
               colorScheme={!showCleverOnly ? 'blue' : 'gray'}
               variant={!showCleverOnly ? 'solid' : 'outline'}
               onClick={() => {
-              form.setValue('showCleverStudents', !showCleverOnly);
-              if (showCleverOnly) form.setValue('districtIdFilter', '');
-            }}
+                form.setValue('showCleverStudents', !showCleverOnly);
+                if (showCleverOnly) {
+                  form.setValue('districtIdFilter', '');
+                  form.setValue('cleverLastSeenStart', '');
+                  form.setValue('cleverLastSeenEnd', '');
+                }
+              }}
             >
               {!showCleverOnly ? 'Show Clever students' : 'Show students'}
             </ChakraButton>
@@ -74,30 +78,58 @@ export const StudentsPanelFilters: FC<Props> = ({ students, uniqueDistrictIds = 
         </ChakraInputGroup>
 
         {showCleverOnly ? (
-          <ChakraInputGroup marginBottom="md">
-            <ChakraInputLeftAddon
-              width="100px"
-              color="white"
-              fontWeight="normal"
-              background="gray.500"
-              borderLeftRadius="sm"
-            >
-              District ID
-            </ChakraInputLeftAddon>
-            <ChakraSelect
-              borderLeftRadius="none"
-              borderRightRadius="sm"
-              name="districtIdFilter"
-              {...form.register('districtIdFilter')}
-            >
-              <option value="">No Filter</option>
-              {uniqueDistrictIds.map((id) => (
-                <option value={id} key={id}>
-                  {id}
-                </option>
-              ))}
-            </ChakraSelect>
-          </ChakraInputGroup>
+          <>
+            <ChakraInputGroup marginBottom="md">
+              <ChakraInputLeftAddon
+                width="100px"
+                color="white"
+                fontWeight="normal"
+                background="gray.500"
+                borderLeftRadius="sm"
+              >
+                District ID
+              </ChakraInputLeftAddon>
+              <ChakraSelect
+                borderLeftRadius="none"
+                borderRightRadius="sm"
+                name="districtIdFilter"
+                {...form.register('districtIdFilter')}
+              >
+                <option value="">No Filter</option>
+                {uniqueDistrictIds.map((id) => (
+                  <option value={id} key={id}>
+                    {id}
+                  </option>
+                ))}
+              </ChakraSelect>
+            </ChakraInputGroup>
+            <ChakraInputGroup marginBottom="md">
+              <ChakraInputLeftAddon
+                width="120px"
+                color="white"
+                fontWeight="normal"
+                background="gray.500"
+                borderLeftRadius="sm"
+              >
+                Last seen
+              </ChakraInputLeftAddon>
+              <ChakraFlex width="100%" minWidth="0px">
+                <ChakraInput
+                  type="date"
+                  borderRadius="none"
+                  name="cleverLastSeenStart"
+                  {...form.register('cleverLastSeenStart')}
+                />
+                <ChakraInput
+                  type="date"
+                  borderLeftRadius="none"
+                  borderRadius="sm"
+                  name="cleverLastSeenEnd"
+                  {...form.register('cleverLastSeenEnd')}
+                />
+              </ChakraFlex>
+            </ChakraInputGroup>
+          </>
         ) : (
           <>
             <ChakraInputGroup marginBottom="md">

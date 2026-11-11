@@ -119,9 +119,9 @@ export const Training: FC<{}> = () => {
       userId: user.uid,
       user: {
         id: user.uid,
-        firstName,
-        lastName,
-        picture
+        firstName: firstName ?? null,
+        lastName: lastName ?? null,
+        picture: picture ?? null
       }
     };
 
